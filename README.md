@@ -23,4 +23,4 @@
     conda activate DitRed
   ```
 
-- Run the `DB_populate_script.py` to create and populate the database with fake, random data.
+- Run the `DB_populate_script.py` in the environment to create and populate the database with fake, random data.
