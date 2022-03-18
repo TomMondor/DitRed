@@ -1,0 +1,15 @@
+# run: conda env create --file environment.yml
+# to update run: conda env update --file environment.yml
+
+name: DitRed
+channels:
+    - conda-forge
+    - defaults
+dependencies:
+    - python>=3.8
+    - pip=22.0.4
+    - pip:
+          - PyMySQL[rsa]
+          - python-dotenv
+          - random-username
+          - python-lorem
