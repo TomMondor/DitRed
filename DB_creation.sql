@@ -1,5 +1,3 @@
-DROP DATABASE IF EXISTS DitRed;
-CREATE database DitRed;
 USE DitRed;
 
 -- ---------------------

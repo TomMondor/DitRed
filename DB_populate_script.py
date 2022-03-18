@@ -8,7 +8,15 @@ import hashlib
 import datetime
 
 
-def create_DB(cursor):
+def create_DB():
+    connection = pymysql.connect(
+        host="localhost", user=USER, password=PASSWORD, autocommit=True
+    )
+    cursor = connection.cursor()
+    cursor.execute("DROP DATABASE IF EXISTS DitRed;")
+    cursor.execute("CREATE DATABASE DitRed;")
+
+def create_tables(cursor):
     commands = parse_SQL_script("DB_creation.sql")
     for command in commands:
         cursor.execute(command)
@@ -126,12 +134,14 @@ if __name__ == '__main__':
     USER = os.getenv('USER')
     PASSWORD = os.getenv('PASSWORD')
 
+    create_DB()
+
     connection = pymysql.connect(
         host="localhost", user=USER, password=PASSWORD, db="ditred", autocommit=True
     )
     cursor = connection.cursor()
 
-    create_DB(cursor)
+    create_tables(cursor)
 
     generate_users(cursor, 400)
     generate_wall_posts(cursor)
