@@ -17,5 +17,10 @@
   ```
     conda env create --file environment.yml
   ```
+  
+- Activate the conda environment.
+  ```
+    conda activate DitRed
+  ```
 
 - Run the `DB_populate_script.py` to create and populate the database with fake, random data.
