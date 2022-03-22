@@ -13,3 +13,4 @@ dependencies:
           - python-dotenv
           - random-username
           - python-lorem
+          - Flask
