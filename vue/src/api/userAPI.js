@@ -43,14 +43,13 @@ export const createUser = async function (userName, password, email, bio, age) {
 };
 
 export const createWallPost = async function (wallPostContent) {
-	//TODO needs the token
 	const response = await fetch(`${BASE_URL}/users/${listId}`, {
 		method: "post",
 		body: JSON.stringify({
 			wallPostContent: wallPostContent,
 		}),
 		headers: new Headers({
-			"Content-Type": "application/json",
+			"Content-Type": "application/json", //TODO needs the token
 		}),
 	});
 
