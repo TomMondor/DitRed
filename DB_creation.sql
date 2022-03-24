@@ -155,6 +155,22 @@ BEGIN
 END; //
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER UpdateSubPostCommentsScore
+AFTER INSERT ON SubPostCommentsVotes
+FOR EACH ROW
+BEGIN
+    IF NEW.vote = 'upvote' THEN
+        UPDATE SubPostComments S
+        SET S.score = S.score + 1
+        WHERE S.id = NEW.sub_post_comment_id;
+    ELSE
+        UPDATE SubPostComments S
+        SET S.score = S.score - 1
+        WHERE S.id = NEW.sub_post_comment_id;
+    END IF;
+END; //
+DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER AssertAnsweredCommentIsOnSamePost
