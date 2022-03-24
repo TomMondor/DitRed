@@ -8,7 +8,7 @@ import hashlib
 import datetime
 
 
-def create_DB():
+def create_db():
     connection = pymysql.connect(
         host="localhost", user=SQL_USER, password=SQL_PASSWORD, autocommit=True
     )
@@ -18,12 +18,12 @@ def create_DB():
 
 
 def create_tables(cursor):
-    commands = parse_SQL_script("DB_creation.sql")
+    commands = parse_sql_script("create_db.sql")
     for command in commands:
         cursor.execute(command)
 
 
-def parse_SQL_script(filename):
+def parse_sql_script(filename):
     """Taken from : http://adamlamers.com/post/GRBJUKCDMPOA
         Parses .sql file to extract every command.
     """
@@ -219,7 +219,7 @@ if __name__ == '__main__':
     SQL_USER = os.getenv('SQL_USER')
     SQL_PASSWORD = os.getenv('SQL_PASSWORD')
 
-    create_DB()
+    create_db()
 
     connection = pymysql.connect(
         host="localhost", user=SQL_USER, password=SQL_PASSWORD, db="DitRed", autocommit=True
