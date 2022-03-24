@@ -10,7 +10,7 @@ import datetime
 
 def create_DB():
     connection = pymysql.connect(
-        host="localhost", user=USER, password=PASSWORD, autocommit=True
+        host="localhost", user=SQL_USER, password=SQL_PASSWORD, autocommit=True
     )
     cursor = connection.cursor()
     cursor.execute("DROP DATABASE IF EXISTS DitRed;")
@@ -159,7 +159,7 @@ def generate_subs(cursor, subs_number):
 
 def generate_subscribers(cursor, subscribers_number, subs_number):
     for subscriber_id in range(1, subscribers_number+1):
-        request = f"""INSERT INTO SUBSCRIBERS (user_id, sub_id) VALUES ({subscriber_id}, {((subscribers_number - subscriber_id) % subs_number) + 1});"""
+        request = f"""INSERT INTO Subscribers (user_id, sub_id) VALUES ({subscriber_id}, {((subscribers_number - subscriber_id) % subs_number) + 1});"""
         cursor.execute(request)
 
 
@@ -171,7 +171,7 @@ def generate_sub_posts(cursor, subs_number, users_number):
         title = get_sentence(count=1, word_range=(1, 10))[:100].strip('. ')
         content = get_sentence(count=randint(1, 5), word_range=(1, 10))
 
-        request = f"""INSERT INTO SUBPOSTS (sub_id, creator_id, timestamp, title, content, score, comments_count) """
+        request = f"""INSERT INTO SubPosts (sub_id, creator_id, timestamp, title, content, score, comments_count) """
         request += f"""VALUES ({sub_id}, {creator_id}, '{timestamp}', '{title}', '{content}', 0, 0);"""
         cursor.execute(request)
 
@@ -190,13 +190,13 @@ def generate_sub_post_comments_votes(cursor):
 
 if __name__ == '__main__':
     load_dotenv()
-    USER = os.getenv('USER')
-    PASSWORD = os.getenv('PASSWORD')
+    SQL_USER = os.getenv('SQL_USER')
+    SQL_PASSWORD = os.getenv('SQL_PASSWORD')
 
     create_DB()
 
     connection = pymysql.connect(
-        host="localhost", user=USER, password=PASSWORD, db="ditred", autocommit=True
+        host="localhost", user=SQL_USER, password=SQL_PASSWORD, db="DitRed", autocommit=True
     )
     cursor = connection.cursor()
 
