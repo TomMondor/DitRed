@@ -192,8 +192,16 @@ def get_random_vote():
     return choice(possible_votes)
 
 
-def generate_sub_post_comments(cursor):
-    pass
+def generate_sub_post_comments(cursor, subs_number, users_number):
+    for sub_post_id in range(1, subs_number+1):
+        user_id = randint(1, users_number)
+        sub_timestamp = get_sub_timestamp(cursor, sub_post_id)
+        timestamp = generate_timestamp_after(sub_timestamp)
+        comment = get_sentence(count=randint(1, 5), word_range=(1, 10))
+
+        request = f"""INSERT INTO SubPostComments (sub_post_id, user_id, timestamp, comment, score, answered_comment_id) """
+        request += f"""VALUES ({sub_post_id}, {user_id}, '{timestamp}', '{comment}', 0, NULL);"""
+        cursor.execute(request)
 
 
 def generate_sub_post_comments_votes(cursor):
@@ -225,5 +233,5 @@ if __name__ == '__main__':
     generate_subscribers(cursor, subscribers_number, subs_number)
     generate_sub_posts(cursor, subs_number, users_number)
     generate_posts_votes(cursor, subs_number, users_number)
-    generate_sub_post_comments(cursor)
+    generate_sub_post_comments(cursor, subs_number, users_number)
     generate_sub_post_comments_votes(cursor)

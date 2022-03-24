@@ -144,7 +144,8 @@ CREATE TRIGGER AssertAnsweredCommentIsOnSamePost
 BEFORE INSERT ON SubPostComments
 FOR EACH ROW
 BEGIN
-    IF NEW.sub_post_id NOT IN (SELECT S.sub_post_id
+    IF NEW.answered_comment_id IS NOT NULL AND
+         NEW.sub_post_id NOT IN (SELECT S.sub_post_id
                                 FROM SubPostComments S
                                 WHERE S.id = NEW.answered_comment_id)
     THEN
