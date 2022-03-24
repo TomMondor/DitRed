@@ -23,19 +23,36 @@ def create_tables(cursor):
         cursor.execute(command)
 
 
-def parse_SQL_script(sql_file_path):
-    with open(sql_file_path, 'r', encoding='utf-8') as f:
-        data = f.read().splitlines()
-    stmt = ''
+def parse_SQL_script(filename):
+    """Taken from : http://adamlamers.com/post/GRBJUKCDMPOA
+        Parses .sql file to extract every command.
+    """
+    data = open(filename, 'r').readlines()
     stmts = []
-    for line in data:
-        if line:
-            if line.startswith('--'):
-                continue
-            stmt += line.strip() + ' '
-            if ';' in stmt:
-                stmts.append(stmt.strip())
-                stmt = ''
+    DELIMITER = ';'
+    stmt = ''
+
+    for lineno, line in enumerate(data):
+        if not line.strip():
+            continue
+
+        if line.startswith('--'):
+            continue
+
+        if 'DELIMITER' in line:
+            DELIMITER = line.split()[1]
+            continue
+
+        if (DELIMITER not in line):
+            stmt += line.replace(DELIMITER, ';')
+            continue
+
+        if stmt:
+            stmt += line
+            stmts.append(stmt.strip().replace('//', ''))
+            stmt = ''
+        else:
+            stmts.append(line.strip().replace('//', ''))
     return stmts
 
 
@@ -142,10 +159,8 @@ def generate_subs(cursor, subs_number):
 
 def generate_subscribers(cursor, subscribers_number, subs_number):
     for subscriber_id in range(1, subscribers_number+1):
-        request = f"""INSERT INTO SUBSCRIBERS (user_id, sub_id) VALUES ({subscriber_id}, {(subscribers_number - subscriber_id) % subs_number});"""
+        request = f"""INSERT INTO SUBSCRIBERS (user_id, sub_id) VALUES ({subscriber_id}, {((subscribers_number - subscriber_id) % subs_number) + 1});"""
         cursor.execute(request)
-
-    # TODO il faut faire la gâchette SQL pour incrémenter le nb de subscribers du Sub
 
 
 def generate_sub_posts(cursor, subs_number, users_number):
