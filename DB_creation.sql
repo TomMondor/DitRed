@@ -100,8 +100,47 @@ CREATE TABLE SubPostCommentsVotes (
 -- TRIGGERS
 -- ---------------------
 
+DELIMITER //
+CREATE TRIGGER IncrementSubscribersCount
+AFTER INSERT ON Subscribers
+FOR EACH ROW
+BEGIN
+    UPDATE Subs S
+    SET S.subscribers_count = S.subscribers_count + 1
+    WHERE S.id = NEW.sub_id;
+END;//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER IncrementCommentsCount
+AFTER INSERT ON SubPostComments
+FOR EACH ROW
+BEGIN
+    UPDATE SubPosts S
+    SET S.comments_count = S.comments_count + 1
+    WHERE S.id = NEW.sub_post_id;
+END;//
+DELIMITER ;
 
 
+DELIMITER //
+CREATE TRIGGER AssertAnsweredCommentIsOnSamePost
+BEFORE INSERT ON SubPostComments
+FOR EACH ROW
+BEGIN
+    IF NEW.sub_post_id NOT IN (SELECT S.sub_post_id
+                                FROM SubPostComments S
+                                WHERE S.id = NEW.answered_comment_id)
+    THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'The comment answers a comment on a different post';
+    END IF;
+END;//
+DELIMITER ;
+
+-- ---------------------
+-- INDEXES
+-- ---------------------
 
 -- ---------------------
 -- SEE THE DB
@@ -113,4 +152,3 @@ SELECT * FROM Passwords;
 SELECT * FROM WallPosts;
 SELECT * FROM Messages;
 SELECT * FROM Subs;
-
