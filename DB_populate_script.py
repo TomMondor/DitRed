@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from random_username.generate import generate_username
 from lorem import get_sentence, get_word, get_paragraph
-from random import randint
+from random import randint, choice, sample
 import hashlib
 import datetime
 
@@ -176,8 +176,20 @@ def generate_sub_posts(cursor, subs_number, users_number):
         cursor.execute(request)
 
 
-def generate_posts_votes(cursor):
-    pass
+def generate_posts_votes(cursor, subs_number, users_number):
+    for sub_post_id in range(1, subs_number+1):
+        user_ids = sample(range(1, users_number), randint(1, 10))
+        for user_id in user_ids:
+            vote = get_random_vote()
+            request = f"""INSERT INTO SubPostsVotes (sub_post_id, user_id, vote) """
+            request += f"""VALUES ({sub_post_id}, {user_id}, '{vote}');"""
+            cursor.execute(request)
+
+
+def get_random_vote():
+    possible_votes = ["upvote", "downvote"]
+
+    return choice(possible_votes)
 
 
 def generate_sub_post_comments(cursor):
@@ -212,6 +224,6 @@ if __name__ == '__main__':
     generate_subs(cursor, subs_number)
     generate_subscribers(cursor, subscribers_number, subs_number)
     generate_sub_posts(cursor, subs_number, users_number)
-    generate_posts_votes(cursor)
+    generate_posts_votes(cursor, subs_number, users_number)
     generate_sub_post_comments(cursor)
     generate_sub_post_comments_votes(cursor)
