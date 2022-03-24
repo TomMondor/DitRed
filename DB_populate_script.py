@@ -186,12 +186,6 @@ def generate_posts_votes(cursor, subs_number, users_number):
             cursor.execute(request)
 
 
-def get_random_vote():
-    possible_votes = ["upvote", "downvote"]
-
-    return choice(possible_votes)
-
-
 def generate_sub_post_comments(cursor, subs_number, users_number):
     for sub_post_id in range(1, subs_number+1):
         user_id = randint(1, users_number)
@@ -204,8 +198,20 @@ def generate_sub_post_comments(cursor, subs_number, users_number):
         cursor.execute(request)
 
 
-def generate_sub_post_comments_votes(cursor):
-    pass
+def generate_sub_post_comments_votes(cursor, subs_number, users_number):
+    for sub_post_comment_id in range(1, subs_number+1):
+        user_ids = sample(range(1, users_number), randint(1, 5))
+        for user_id in user_ids:
+            vote = get_random_vote()
+            request = f"""INSERT INTO SubPostCommentsVotes (sub_post_comment_id, user_id, vote) """
+            request += f"""VALUES ({sub_post_comment_id}, {user_id}, '{vote}');"""
+            cursor.execute(request)
+
+
+def get_random_vote():
+    possible_votes = ["upvote", "downvote"]
+
+    return choice(possible_votes)
 
 
 if __name__ == '__main__':
@@ -234,4 +240,4 @@ if __name__ == '__main__':
     generate_sub_posts(cursor, subs_number, users_number)
     generate_posts_votes(cursor, subs_number, users_number)
     generate_sub_post_comments(cursor, subs_number, users_number)
-    generate_sub_post_comments_votes(cursor)
+    generate_sub_post_comments_votes(cursor, subs_number, users_number)
