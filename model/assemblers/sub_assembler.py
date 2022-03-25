@@ -1,5 +1,4 @@
 from exceptions.missing_exception.missing_sub_exception import MissingSubException
-from exceptions.invalid_exception.invalid_user_exception import *
 
 
 class SubAssembler:
