@@ -5,10 +5,18 @@ class MessagesRepository(Repository):
     def __init__(self):
         super().__init__()
 
-    def get_convo(self, id):
+    def get_convos(self, id):
         self.cursor.execute(
             f"SELECT DISTINCT sender_id, (SELECT username FROM Users WHERE id = sender_id) FROM Messages WHERE receiver_id = {id}\
                 UNION\
                 SELECT DISTINCT receiver_id, (SELECT username FROM Users WHERE id = receiver_id) FROM Messages WHERE sender_id = {id}"
+        )
+        return self.cursor.fetchall()
+
+    def get_convo(self, first_user_id, second_user_id):
+        self.cursor.execute(
+            f"SELECT * FROM Messages WHERE sender_id = {first_user_id} AND receiver_id = {second_user_id}\
+                UNION\
+                SELECT * FROM Messages WHERE sender_id = {second_user_id} AND receiver_id = {first_user_id}"
         )
         return self.cursor.fetchall()
