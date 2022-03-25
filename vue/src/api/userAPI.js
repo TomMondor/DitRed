@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000"; //TODO put the right PORT
+const BASE_URL = "http://localhost:5000";
 
 export const getAllUsers = async function () {
 	const response = await fetch(`${BASE_URL}/users`);
@@ -22,11 +22,11 @@ export const getUser = async function (userId) {
 	return jsonResponse; //TODO extract data if necessary
 };
 
-export const createUser = async function (userName, password, email, bio, age) {
-	const response = await fetch(`${BASE_URL}/users/${listId}`, {
+export const createUser = async function (username, password, email, bio, age) {
+	const response = await fetch(`${BASE_URL}/users`, {
 		method: "post",
 		body: JSON.stringify({
-			userName: userName,
+			username: username,
 			password: password, //TODO should password be hashed here?
 			email: email,
 			bio: bio,
