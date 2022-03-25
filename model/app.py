@@ -1,14 +1,16 @@
 from flask import Flask, jsonify, request
 
+from repositories.messages_repository import MessagesRepository
 from repositories.users_repository import UsersRepository
 from repositories.subs_repository import SubsRepository
 
+from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
 from assemblers.sub_assembler import SubAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
-from exceptions.invalid_exception.invalid_sub_exception import InvalidSubException
+from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 
@@ -20,6 +22,8 @@ user_assembler = UserAssembler()
 subs_repository = SubsRepository()
 sub_assembler = SubAssembler()
 
+messages_repository = MessagesRepository()
+messages_assembler = MessageAssembler()
 
 @app.errorhandler(InvalidParameterException)
 def handle_exception(e):
@@ -74,7 +78,7 @@ def get_subs():
 def get_sub(sub_id):
     sub = subs_repository.get_sub(sub_id)
     if sub is None:
-        raise InvalidSubException()
+        raise InvalidSubIdException()
     response = jsonify(sub_assembler.assemble_sub(sub))
     return response
 
@@ -82,8 +86,18 @@ def get_sub(sub_id):
 @app.route("/subs", methods=["POST"])
 def post_sub():
     content = request.get_json()
+    sub_assembler.check_create_sub_request(content)
     sub_id = subs_repository.create_sub(content["name"], content["creator_id"], content["description"])
-    return {"sub_id": sub_id}
+    return {"sub_id": sub_id}, 201
+
+#TODO Implement token validation so random people can't get anyone's messages
+@app.route("/convo", methods=["GET"])
+def get_convo():
+    id = request.headers.get("id")
+    users = messages_repository.get_convo(id)
+    response = jsonify(messages_assembler.assemble_convos(users))
+
+    return response
 
 
 if __name__ == '__main__':

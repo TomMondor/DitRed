@@ -1,3 +1,6 @@
+from exceptions.missing_exception.missing_sub_exception import MissingSubException
+
+
 class SubAssembler:
     def __parse_sub(self, sub):
         sub_info = {
@@ -20,3 +23,15 @@ class SubAssembler:
     def assemble_sub(self, sub):
         sub_id, sub_info = self.__parse_sub(sub)
         return {sub_id: sub_info}
+
+    def check_create_sub_request(self, request):
+        self.__check_request_exists(request)
+        self.__check_request_parameters_not_empty(request)
+
+    def __check_request_exists(self, request):
+        if not request:
+            raise MissingSubException()
+
+    def __check_request_parameters_not_empty(self, request):
+        if 'name' not in request or 'creator_id' not in request or 'description' not in request:
+            raise MissingSubException()
