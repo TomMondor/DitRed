@@ -26,20 +26,47 @@ class UserAssembler:
         return {user_id: user_info}
 
     def check_create_user_request(self, request):
+        self.__check_request_fields_present(request)
+        self.__check_user_email(request['email'])
+        self.__check_user_username(request['username'])
+        self.__check_user_bio(request['bio'])
+        self.__check_user_age(request['age'])
+        self.__check_user_password(request['password'])
+
+    def __check_request_fields_present(self, request):
         if not request:
             raise MissingUserException()
         if 'email' not in request or 'username' not in request or 'bio' not in request \
                 or 'age' not in request or 'password' not in request:
             raise MissingUserException()
-        if not re.match(r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$', str(request['email'])):
+        if request['email'] is None or request['username'] is None or request['bio'] is None \
+                or request['age'] is None or request['password'] is None:
+            raise MissingUserException()
+
+    def __check_user_email(self, email):
+        if len(email) > 256:
             raise InvalidEmailException()
-        if isinstance(request['age'], str):
-            if not request['age'].isdecimal() or int(request['age']) < 0 or int(request['age']) > 120:
+        if not re.match(r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$', str(email)):
+            raise InvalidEmailException()
+
+    def __check_user_username(self, username):
+        if len(username) > 30:
+            raise InvalidUsernameException()
+
+    def __check_user_bio(self, bio):
+        if len(bio) > 1000:
+            raise InvalidBioException()
+
+    def __check_user_age(self, age):
+        if isinstance(age, str):
+            if not age.isdecimal() or int(age) < 0 or int(age) > 120:
                 raise InvalidAgeException()
-        elif isinstance(request['age'], int):
-            if request['age'] < 0 or request['age'] > 120:
+        elif isinstance(age, int):
+            if age < 0 or age > 120:
                 raise InvalidAgeException()
         else:
             raise InvalidAgeException()
-        if not re.match(r'^[0-9a-f]{96}$', str(request['password'])):
+
+    def __check_user_password(self, password):
+        if not re.match(r'^[0-9a-f]{96}$', str(password)):
             raise InvalidPasswordException()

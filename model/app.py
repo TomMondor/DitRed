@@ -58,8 +58,9 @@ def get_user(user_id):
 def post_user():
     user_info = request.get_json()
     user_assembler.check_create_user_request(user_info)
-    # call le repository
-    return "OK"
+    user_id = users_repository.create_user(user_info)
+    response = jsonify({"userId": user_id})
+    return response, 201
 
 
 @app.route("/subs", methods=["GET"])
