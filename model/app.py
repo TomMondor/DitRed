@@ -8,7 +8,7 @@ from assemblers.sub_assembler import SubAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
-from exceptions.invalid_exception.invalid_sub_exception import InvalidSubException
+from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 
@@ -73,7 +73,7 @@ def get_subs():
 def get_sub(sub_id):
     sub = subs_repository.get_sub(sub_id)
     if sub is None:
-        raise InvalidSubException()
+        raise InvalidSubIdException()
     response = jsonify(sub_assembler.assemble_sub(sub))
     return response
 
@@ -81,8 +81,9 @@ def get_sub(sub_id):
 @app.route("/subs", methods=["POST"])
 def post_sub():
     content = request.get_json()
+    sub_assembler.check_create_sub_request(content)
     sub_id = subs_repository.create_sub(content["name"], content["creator_id"], content["description"])
-    return {"sub_id": sub_id}
+    return {"sub_id": sub_id}, 201
 
 
 if __name__ == '__main__':
