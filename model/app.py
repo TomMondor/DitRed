@@ -45,9 +45,9 @@ def get_user(user_id):
     return response
 
 
-@app.route("/users/:userId", methods=["POST"])
+@app.route("/users", methods=["POST"])
 def post_user():
-    pass
+    user_info = request.get_json()
 
 
 @app.route("/subs", methods=["GET"])

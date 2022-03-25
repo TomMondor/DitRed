@@ -19,3 +19,9 @@ class UserAssembler:
     def assemble_user(self, user):
         user_id, user_info = self.__parse_user(user)
         return {user_id: user_info}
+
+
+    def check_create_user_request(self, request):
+        if 'email' not in request or 'username' not in request or 'bio' not in request or 'age' not in request:
+            return False
+        return True
