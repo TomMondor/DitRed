@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 from repositories.users_repository import UsersRepository
 from repositories.subs_repository import SubsRepository
@@ -70,7 +70,9 @@ def get_sub(sub_id):
 
 @app.route("/subs", methods=["POST"])
 def post_sub():
-    pass
+    content = request.get_json()
+    sub_id = subs_repository.create_sub(content["name"], content["creator_id"], content["description"])
+    return {"sub_id": sub_id}
 
 
 if __name__ == '__main__':

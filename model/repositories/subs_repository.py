@@ -12,3 +12,8 @@ class SubsRepository(Repository):
     def get_sub(self, id):
         self.cursor.execute(f"SELECT * FROM Subs WHERE id = {id}")
         return self.cursor.fetchone()
+
+    def create_sub(self, name, creator_id, description):
+        self.cursor.execute(f"INSERT INTO Subs (name, creator_id, timestamp, description, subscribers_count) " +
+                            f"VALUES ('{name}', {creator_id}, NOW(), '{description}', 0)")
+        return self.cursor.lastrowid
