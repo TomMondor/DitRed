@@ -10,9 +10,14 @@ def start_page():
 
 @app.route("/users", methods=["GET"])
 def get_all_users():
-    return "<p>all users<p>"
+    pass
 
 
 @app.route("/users/:userId", methods=["GET"])
 def get_user():
+    pass
+
+
+@app.route("/users/:userId", methods=["POST"])
+def post_user():
     pass
