@@ -9,8 +9,9 @@ from assemblers.user_assembler import UserAssembler
 from assemblers.sub_assembler import SubAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
-from exceptions.invalid_exception.invalid_user_exception import InvalidUserException
+from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubException
+from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 
 app = Flask(__name__)
@@ -25,6 +26,12 @@ messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
 
 @app.errorhandler(InvalidParameterException)
+def handle_exception(e):
+    response = jsonify({"message": e.message})
+    return response, e.status_code
+
+
+@app.errorhandler(MissingParameterException)
 def handle_exception(e):
     response = jsonify({"message": e.message})
     return response, e.status_code
@@ -46,7 +53,7 @@ def get_all_users():
 def get_user(user_id):
     user = users_repository.get_user(user_id)
     if user is None:
-        raise InvalidUserException()
+        raise InvalidUserIdException()
     response = jsonify(user_assembler.assemble_user(user))
     return response
 
@@ -54,6 +61,9 @@ def get_user(user_id):
 @app.route("/users", methods=["POST"])
 def post_user():
     user_info = request.get_json()
+    user_assembler.check_create_user_request(user_info)
+    # call le repository
+    return "OK"
 
 
 @app.route("/subs", methods=["GET"])
