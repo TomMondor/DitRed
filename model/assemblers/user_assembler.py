@@ -1,5 +1,5 @@
 class UserAssembler:
-    def assemble_user(self, user):
+    def __parse_user(self, user):
         user_info = {
             'email': user[1],
             'username': user[2],
@@ -12,6 +12,10 @@ class UserAssembler:
     def assemble_users(self, users_list):
         users = {}
         for user in users_list:
-            user_id, user_info = self.assemble_user(user)
+            user_id, user_info = self.__parse_user(user)
             users[user_id] = user_info
         return users
+
+    def assemble_user(self, user):
+        user_id, user_info = self.__parse_user(user)
+        return {user_id: user_info}
