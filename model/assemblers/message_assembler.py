@@ -1,5 +1,5 @@
 class MessageAssembler:
-	def assemble_convos(self, users):
+	def assemble_users(self, users):
 		contacts = {}
 		for user in users:
 			id = user[0]
@@ -7,3 +7,15 @@ class MessageAssembler:
 			contacts[id] = username
 
 		return contacts
+
+	def assemble_convo(self, convo):
+		assembled_convo = {}
+		for message in convo:
+			current_message = {}
+			current_message["sender_id"] = message[1]
+			current_message["receiver_id"] = message[2]
+			current_message["timestamp"] = message[3]
+			current_message["content"] = message[4]
+			assembled_convo[message[0]] = current_message
+		
+		return assembled_convo

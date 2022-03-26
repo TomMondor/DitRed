@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask, jsonify, request
 
 from repositories.messages_repository import MessagesRepository
@@ -62,8 +63,9 @@ def get_user(user_id):
 def post_user():
     user_info = request.get_json()
     user_assembler.check_create_user_request(user_info)
-    # call le repository
-    return "OK"
+    user_id = users_repository.create_user(user_info)
+    response = jsonify({"userId": user_id})
+    return response, 201
 
 
 @app.route("/subs", methods=["GET"])
@@ -102,10 +104,17 @@ def put_sub(sub_id):
 # TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
 def get_convo():
-    id = request.headers.get("id")
-    users = messages_repository.get_convo(id)
-    response = jsonify(messages_assembler.assemble_convos(users))
+    id = request.headers.get("user_id")
+    users = messages_repository.get_convos(id)
+    response = jsonify(messages_assembler.assemble_users(users))
+    return response
 
+
+@app.route("/convo/<user_id>", methods=["GET"])
+def get_specific_convo(user_id):
+    current_id = request.headers.get("user_id")
+    convo = messages_repository.get_convo(current_id, user_id)
+    response = jsonify(messages_assembler.assemble_convo(convo))
     return response
 
 
