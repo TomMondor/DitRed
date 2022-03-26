@@ -13,7 +13,6 @@ from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdExc
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
-
 app = Flask(__name__)
 
 users_repository = UsersRepository()
@@ -24,6 +23,7 @@ sub_assembler = SubAssembler()
 
 messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
+
 
 @app.errorhandler(InvalidParameterException)
 def handle_exception(e):
@@ -89,7 +89,17 @@ def post_sub():
     sub_id = subs_repository.create_sub(content["name"], content["creator_id"], content["description"])
     return {"sub_id": sub_id}, 201
 
-#TODO Implement token validation so random people can't get anyone's messages
+
+@app.route("/subs/<sub_id>", methods=["PUT"])
+def put_sub(sub_id):
+    content = request.get_json()
+    sub_assembler.check_create_sub_request(content)
+    updated_sub_content = subs_repository.update_sub(sub_id, content["name"],
+                                                     content["creator_id"], content["description"])
+    return jsonify(sub_assembler.assemble_sub(updated_sub_content))
+
+
+# TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
 def get_convo():
     id = request.headers.get("id")
