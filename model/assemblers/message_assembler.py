@@ -19,3 +19,13 @@ class MessageAssembler:
 			assembled_convo[message[0]] = current_message
 		
 		return assembled_convo
+
+	def assemble_message(self, message):
+		assembled_message = {}
+		assembled_message["id"] = message[0][0][0]
+		assembled_message["sender_id"] = message[1]
+		assembled_message["receiver_id"] = message[2]
+		assembled_message["timestamp"] = message[3]
+		assembled_message["content"] = message[4]
+
+		return assembled_message

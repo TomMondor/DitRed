@@ -1,4 +1,5 @@
 from repositories.repository import Repository
+from datetime import datetime
 
 
 class MessagesRepository(Repository):
@@ -20,3 +21,15 @@ class MessagesRepository(Repository):
                 SELECT * FROM Messages WHERE sender_id = {second_user_id} AND receiver_id = {first_user_id}"
         )
         return self.cursor.fetchall()
+
+    def create_message(self, sender_id, receiver_id, content):
+        timestamp = datetime.today()
+        self.cursor.execute(
+            f"INSERT INTO Messages (sender_id, receiver_id, timestamp, message)\
+                VALUES ({sender_id}, {receiver_id}, '{timestamp})', '{content}');"
+        )
+        self.cursor.execute(
+            f"SELECT LAST_INSERT_ID();"
+        )
+        id = self.cursor.fetchall()
+        return id, sender_id, receiver_id, timestamp, content
