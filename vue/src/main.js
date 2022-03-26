@@ -9,6 +9,11 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import { faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
+import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faListUl } from "@fortawesome/free-solid-svg-icons";
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -17,6 +22,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faArrowDown);
 library.add(faArrowUp);
 library.add(faMessage);
+library.add(faUser);
+library.add(faCommentDots);
+library.add(faChalkboardUser);
+library.add(faUsers);
+library.add(faListUl);
 
 /* add font awesome icon component */
 Vue.component("font-awesome-icon", FontAwesomeIcon);
