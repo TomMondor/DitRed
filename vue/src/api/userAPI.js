@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000"; //TODO put the right PORT
+const BASE_URL = "http://localhost:5000"; //TODO put the right PORT
 
 export const getAllUsers = async function () {
 	const response = await fetch(`${BASE_URL}/users`);
