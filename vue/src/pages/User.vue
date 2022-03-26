@@ -1,5 +1,14 @@
 <template>
-	<div>User {{ userData.username }} User</div>
+	<div>
+		<div>{{ userData.username }}</div>
+		<div>{{ userData.email }}</div>
+		<div>{{ userData.age }}</div>
+		<div>Bio : {{ userData.bio }}</div>
+		<div style="padding-top: 10px">Wallposts :</div>
+		<div v-for="wallPost in userData.wallPosts" :key="wallPost[0]">
+			<div style="padding-top: 10px">Wall post : {{ wallPost[0] }}</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -18,7 +27,8 @@ export default {
 	},
 	methods: {
 		async getUserData() {
-			this.userData = await getUser(this.userId);
+			const data = await getUser(this.userId);
+			this.userData = data[this.userId];
 		},
 	},
 };
