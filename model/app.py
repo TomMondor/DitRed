@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask, jsonify, request
 
 from repositories.messages_repository import MessagesRepository
@@ -12,7 +13,6 @@ from exceptions.invalid_exception.invalid_parameter_exception import InvalidPara
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
-
 
 app = Flask(__name__)
 
@@ -102,13 +102,30 @@ def post_sub():
     sub_id = subs_repository.create_sub(content["name"], content["creator_id"], content["description"])
     return {"sub_id": sub_id}, 201
 
-#TODO Implement token validation so random people can't get anyone's messages
+
+@app.route("/subs/<sub_id>", methods=["PUT"])
+def put_sub(sub_id):
+    content = request.get_json()
+    sub_assembler.check_create_sub_request(content)
+    updated_sub_content = subs_repository.update_sub(sub_id, content["name"],
+                                                     content["creator_id"], content["description"])
+    return jsonify(sub_assembler.assemble_sub(updated_sub_content))
+
+
+# TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
 def get_convo():
-    id = request.headers.get("id")
-    users = messages_repository.get_convo(id)
-    response = jsonify(messages_assembler.assemble_convos(users))
+    id = request.headers.get("user_id")
+    users = messages_repository.get_convos(id)
+    response = jsonify(messages_assembler.assemble_users(users))
+    return response
 
+
+@app.route("/convo/<user_id>", methods=["GET"])
+def get_specific_convo(user_id):
+    current_id = request.headers.get("user_id")
+    convo = messages_repository.get_convo(current_id, user_id)
+    response = jsonify(messages_assembler.assemble_convo(convo))
     return response
 
 
