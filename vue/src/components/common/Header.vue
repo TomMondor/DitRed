@@ -53,13 +53,12 @@ export default {
 .header {
     display: flex;
     align-items: center;
-    padding-left: 1vw;
     gap: 2vw;
 
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
 
     height: 3.5rem;
 
@@ -76,6 +75,7 @@ export default {
 }
 
 .logo-container {
+    margin-left: 1vw;
     display: flex;
     gap: 0.3rem;
     align-items: center;

@@ -79,3 +79,4 @@ class SubsRepository(Repository):
     def __get_updated_sub_data(self, id):
         self.cursor.execute(f"SELECT * FROM Subs WHERE id = {id}")
         return self.cursor.fetchone()
+    
