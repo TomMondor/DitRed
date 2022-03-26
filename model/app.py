@@ -1,4 +1,3 @@
-from email import message
 from flask import Flask, jsonify, request
 
 from repositories.messages_repository import MessagesRepository
