@@ -37,3 +37,14 @@ class UsersRepository(Repository):
     def does_email_exist(self, email):
         self.cursor.execute(f"""SELECT * FROM Users WHERE email = '{email}'""")
         return self.cursor.fetchone() is not None
+
+    def create_wallpost(self, user_id, wall_post):
+        self.cursor.execute(f"""INSERT INTO WallPosts (user_id, message, timestamp)
+                            VALUES ({user_id}, '{wall_post}', NOW());""")
+        self.cursor.execute(f"""SELECT id FROM WallPosts WHERE user_id = {user_id} AND message = '{wall_post}'""")
+        wall_post_id = self.cursor.fetchone()[0]
+        return wall_post_id
+
+    def get_wallposts(self, user_id):
+        self.cursor.execute(f"""SELECT message FROM WallPosts WHERE user_id = {user_id}""")
+        return self.cursor.fetchall()

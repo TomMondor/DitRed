@@ -42,8 +42,8 @@ export const createUser = async function (username, password, email, bio, age) {
 	}
 };
 
-export const createWallPost = async function (wallPostContent) {
-	const response = await fetch(`${BASE_URL}/users/${listId}`, {
+export const createWallPost = async function (ownUserId, wallPostContent) {
+	const response = await fetch(`${BASE_URL}/users/${userId}`, {
 		method: "post",
 		body: JSON.stringify({
 			wallPostContent: wallPostContent,

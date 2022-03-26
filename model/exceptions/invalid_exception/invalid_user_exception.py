@@ -25,3 +25,7 @@ class InvalidEmailException(InvalidParameterException):
 class InvalidAgeException(InvalidParameterException):
     def __init__(self):
         super().__init__("Invalid user age")
+
+class InvalidWallPostException(InvalidParameterException):
+    def __init__(self):
+        super().__init__("Invalid wall post content")

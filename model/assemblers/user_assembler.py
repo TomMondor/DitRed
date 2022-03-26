@@ -1,4 +1,5 @@
 from exceptions.missing_exception.missing_user_exception import MissingUserException
+from exceptions.missing_exception.missing_wall_post_exception import MissingWallPostException
 from exceptions.invalid_exception.invalid_user_exception import *
 import re
 
@@ -21,9 +22,19 @@ class UserAssembler:
             users[user_id] = user_info
         return users
 
-    def assemble_user(self, user):
+    def assemble_user(self, user, wall_posts):
         user_id, user_info = self.__parse_user(user)
+        user_info['wallPosts'] = wall_posts
         return {user_id: user_info}
+
+    def check_create_wallpost_request(self, request):
+        if request is None or 'wallPostContent' not in request:
+            raise MissingWallPostException()
+        wall_post_content = request["wallPostContent"]
+        if wall_post_content is None:
+            raise MissingWallPostException()
+        if not isinstance(wall_post_content, str):
+            raise InvalidWallPostException()
 
     def check_create_user_request(self, request):
         self.__check_request_fields_present(request)

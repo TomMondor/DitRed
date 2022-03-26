@@ -25,6 +25,7 @@ sub_assembler = SubAssembler()
 messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
 
+
 @app.errorhandler(InvalidParameterException)
 def handle_exception(e):
     response = jsonify({"message": e.message})
@@ -54,7 +55,8 @@ def get_user(user_id):
     user = users_repository.get_user(user_id)
     if user is None:
         raise InvalidUserIdException()
-    response = jsonify(user_assembler.assemble_user(user))
+    wall_posts = users_repository.get_wallposts(user_id)
+    response = jsonify(user_assembler.assemble_user(user, wall_posts))
     return response
 
 
@@ -65,6 +67,16 @@ def post_user():
     user_id = users_repository.create_user(user_info)
     response = jsonify({"userId": user_id})
     return response, 201
+
+
+@app.route("/users/<int:user_id>", methods=["POST"])
+def post_wall_post(user_id):
+    # TODO check user token
+    content = request.get_json()
+    user_assembler.check_create_wallpost_request(content)
+    wall_post_content = content["wallPostContent"]
+    wall_post_id = users_repository.create_wallpost(user_id, wall_post_content)
+    return {"wall_post_id": wall_post_id}, 201
 
 
 @app.route("/subs", methods=["GET"])
