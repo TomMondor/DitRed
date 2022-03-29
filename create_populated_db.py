@@ -97,7 +97,7 @@ def generate_users(cursor, users_number):
     for username in user_names:
         bio = get_sentence(count=(2, 5))
         age = randint(13, 100)
-        request = f"""INSERT INTO Users (email, username, bio, age) VALUES ('{username}@mail.com', '{username[:30]}', '{bio}', {age});"""
+        request = f"""INSERT INTO Users (email, username, bio, age, createdAt) VALUES ('{username}@mail.com', '{username[:30]}', '{bio}', {age}, CURDATE());"""
         cursor.execute(request)
 
         generate_last_user_password(cursor)
@@ -165,15 +165,16 @@ def generate_subscribers(cursor, subscribers_number, subs_number):
 
 def generate_sub_posts(cursor, subs_number, users_number):
     for sub_id in range(1, subs_number+1):
-        creator_id = randint(1, users_number)
-        sub_timestamp = get_sub_timestamp(cursor, sub_id)
-        timestamp = generate_timestamp_after(sub_timestamp)
-        title = get_sentence(count=1, word_range=(1, 10))[:100].strip('. ')
-        content = get_sentence(count=randint(1, 5), word_range=(1, 10))
+        for _ in range(randint(1, 5)):
+            creator_id = randint(1, users_number)
+            sub_timestamp = get_sub_timestamp(cursor, sub_id)
+            timestamp = generate_timestamp_after(sub_timestamp)
+            title = get_sentence(count=1, word_range=(1, 10))[:100].strip('. ')
+            content = get_sentence(count=randint(1, 5), word_range=(1, 10))
 
-        request = f"""INSERT INTO SubPosts (sub_id, creator_id, timestamp, title, content, score, comments_count) """
-        request += f"""VALUES ({sub_id}, {creator_id}, '{timestamp}', '{title}', '{content}', 0, 0);"""
-        cursor.execute(request)
+            request = f"""INSERT INTO SubPosts (sub_id, creator_id, timestamp, title, content, score, comments_count) """
+            request += f"""VALUES ({sub_id}, {creator_id}, '{timestamp}', '{title}', '{content}', 0, 0);"""
+            cursor.execute(request)
 
 
 def generate_posts_votes(cursor, subs_number, users_number):

@@ -5,11 +5,12 @@ USE DitRed;
 -- ---------------------
 
 CREATE TABLE Users (
-    id      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    email   VARCHAR(256) UNIQUE NOT NULL,
-    username VARCHAR(30) UNIQUE NOT NULL,
-    bio     VARCHAR(1000),
-    age     INT NOT NULL
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email       VARCHAR(256) UNIQUE NOT NULL,
+    username    VARCHAR(30) UNIQUE NOT NULL,
+    bio         VARCHAR(1000),
+    age         INT NOT NULL,
+    createdAt   DATE NOT NULL
 );
 
 CREATE TABLE Passwords (
