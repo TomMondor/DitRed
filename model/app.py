@@ -4,15 +4,18 @@ from repositories.messages_repository import MessagesRepository
 from repositories.users_repository import UsersRepository
 from repositories.subs_repository import SubsRepository
 from repositories.subposts_repository import SubPostsRepository
+from repositories.comments_repository import CommentsRepository
 
 from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
 from assemblers.sub_assembler import SubAssembler
 from assemblers.subpost_assembler import SubPostAssembler
+from assemblers.comment_assembler import CommentAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
+from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 app = Flask(__name__)
@@ -25,6 +28,9 @@ sub_assembler = SubAssembler()
 
 sub_posts_repository = SubPostsRepository()
 sub_post_assembler = SubPostAssembler()
+
+comments_repository = CommentsRepository()
+comments_assembler = CommentAssembler()
 
 messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
@@ -122,6 +128,25 @@ def get_sub_posts(sub_id):
         user_id = post[2]
         authors[user_id] = users_repository.get_username(user_id)
     response = jsonify(sub_post_assembler.assemble_posts(posts, authors))
+
+    return response
+
+
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>", methods=["GET"])
+def get_sub_post(sub_id, sub_post_id):
+    post = sub_posts_repository.get_post(sub_post_id)
+    if post is None:
+        raise InvalidSubPostIdException()
+    user_id = post[2]
+    author = users_repository.get_username(user_id)
+    comments = comments_repository.get_comments(sub_post_id)
+    authors = {}
+    for comment in comments:
+        comment_id = comment[0]
+        user_id = comment[2]
+        authors[comment_id] = users_repository.get_username(user_id)
+    assembled_comments = comments_assembler.assemble_comments(comments, authors)
+    response = jsonify(sub_post_assembler.assemble_post(post, author, assembled_comments))
 
     return response
 

@@ -24,7 +24,7 @@ class SubsRepository(Repository):
                             f"VALUES ('{name}', {creator_id}, NOW(), '{description}', 0)")
         return self.cursor.lastrowid
 
-    def __check_new_sub_validity(self, sub_id, new_name, creator_id):
+    def __check_new_sub_validity(self, new_name, creator_id):
         self.__raise_error_if_creator_id_exists(creator_id)
         self.__raise_error_if_new_sub_name_exists(new_name)
 
