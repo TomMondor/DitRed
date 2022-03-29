@@ -37,6 +37,7 @@ export default {
     --primary: orangered;
     --secondary: grey;
     --background: #222222;
+    --backgroundlighter: rgb(63, 62, 62);
     --mainwhite: #ffffff;
 }
 </style>
