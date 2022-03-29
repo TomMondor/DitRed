@@ -3,10 +3,12 @@ from flask import Flask, jsonify, request
 from repositories.messages_repository import MessagesRepository
 from repositories.users_repository import UsersRepository
 from repositories.subs_repository import SubsRepository
+from repositories.subposts_repository import SubPostsRepository
 
 from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
 from assemblers.sub_assembler import SubAssembler
+from assemblers.subpost_assembler import SubPostAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
@@ -20,6 +22,9 @@ user_assembler = UserAssembler()
 
 subs_repository = SubsRepository()
 sub_assembler = SubAssembler()
+
+sub_posts_repository = SubPostsRepository()
+sub_post_assembler = SubPostAssembler()
 
 messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
@@ -99,12 +104,24 @@ def get_subs():
     return response
 
 
-@app.route("/subs/<sub_id>", methods=["GET"])
+@app.route("/subs/<int:sub_id>", methods=["GET"])
 def get_sub(sub_id):
     sub = subs_repository.get_sub(sub_id)
     if sub is None:
         raise InvalidSubIdException()
     response = jsonify(sub_assembler.assemble_sub(sub))
+
+    return response
+
+
+@app.route("/subs/<int:sub_id>/posts", methods=["GET"])
+def get_sub_posts(sub_id):
+    posts = sub_posts_repository.get_posts(sub_id)
+    authors = {}
+    for post in posts:
+        user_id = post[2]
+        authors[user_id] = users_repository.get_username(user_id)
+    response = jsonify(sub_post_assembler.assemble_posts(posts, authors))
 
     return response
 
@@ -118,7 +135,7 @@ def post_sub():
     return {"sub_id": sub_id}, 201
 
 
-@app.route("/subs/<sub_id>", methods=["PUT"])
+@app.route("/subs/<int:sub_id>", methods=["PUT"])
 def put_sub(sub_id):
     content = request.get_json()
     sub_assembler.check_create_sub_request(content)
@@ -143,7 +160,7 @@ def get_convo():
 
 
 # TODO Implement token validation so random people can't get anyone's messages
-@app.route("/convo/<user_id>", methods=["GET"])
+@app.route("/convo/<int:user_id>", methods=["GET"])
 def get_specific_convo(user_id):
     current_id = request.headers.get("user_id")
     convo = messages_repository.get_convo(current_id, user_id)
@@ -153,7 +170,7 @@ def get_specific_convo(user_id):
 
 
 # TODO Implement token validation so random people can't get anyone's messages
-@app.route("/convo/<user_id>", methods=["POST"])
+@app.route("/convo/<int:user_id>", methods=["POST"])
 def post_message(user_id):
     current_id = request.headers.get("user_id")
     req = request.get_json()

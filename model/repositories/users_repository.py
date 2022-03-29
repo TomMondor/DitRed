@@ -14,6 +14,10 @@ class UsersRepository(Repository):
         self.cursor.execute(f"SELECT * FROM Users WHERE id = {id}")
         return self.cursor.fetchone()
 
+    def get_username(self, user_id):
+        self.cursor.execute(f"""SELECT username FROM Users WHERE id = {user_id}""")
+        return self.cursor.fetchone()[0]
+
     def create_user(self, user):
         self.__verify_username_and_email_are_unique(user['username'], user['email'])
         self.cursor.execute(f"""INSERT INTO Users (email, username, bio, age)
