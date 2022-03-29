@@ -10,7 +10,7 @@ class UserAssembler:
             'email': user[1],
             'username': user[2],
             'bio': user[3],
-            'age': user[4]
+            'memberSince': user[5]
         }
 
         return user[0], user_info  # user[0] = user_id

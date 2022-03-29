@@ -46,7 +46,7 @@ def handle_exception(e):
     return response, e.status_code
 
 
-@app.route("/")
+@app.route("/")  # TODO remove (or replace by sending frontend files)
 def start_page():
     return "<p>Welcome to DitRed<p>"
 

@@ -97,7 +97,7 @@ def generate_users(cursor, users_number):
     for username in user_names:
         bio = get_sentence(count=(2, 5))
         age = randint(13, 100)
-        request = f"""INSERT INTO Users (email, username, bio, age) VALUES ('{username}@mail.com', '{username[:30]}', '{bio}', {age});"""
+        request = f"""INSERT INTO Users (email, username, bio, age, createdAt) VALUES ('{username}@mail.com', '{username[:30]}', '{bio}', {age}, CURDATE());"""
         cursor.execute(request)
 
         generate_last_user_password(cursor)
