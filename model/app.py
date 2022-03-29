@@ -39,6 +39,7 @@ messages_assembler = MessageAssembler()
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
+    response.headers["Access-Control-Allow-Headers"] = "user_id"
 
     return response
 
