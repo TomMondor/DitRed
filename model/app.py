@@ -39,7 +39,7 @@ messages_assembler = MessageAssembler()
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
-    response.headers["Access-Control-Allow-Headers"] = "user_id"
+    response.headers["Access-Control-Allow-Headers"] = "user_id,content-type"
 
     return response
 
@@ -200,7 +200,7 @@ def get_specific_convo(user_id):
 def post_message(user_id):
     current_id = request.headers.get("user_id")
     req = request.get_json()
-    content = req["content"]
+    content = req["message"]
     message = messages_repository.create_message(current_id, user_id, content)
     response = jsonify(messages_assembler.assemble_message(message))
 
