@@ -14,7 +14,7 @@
                 ]"
             />
         </div>
-        <div class="write-message">
+        <!-- <div class="write-message">
             <textarea
                 class="write-message-textarea"
                 v-model="message"
@@ -24,7 +24,7 @@
             <button class="write-message-button" @click="sendMessage">
                 Send
             </button>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
         return {
             convoData: {},
             myUserId: 17, //TODO get real value
-            userId: 1, //TODO get real value
+            userId: 36, //TODO get real value
         };
     },
     methods: {
@@ -53,7 +53,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .convo-header {
     color: var(--mainwhite);
 }
