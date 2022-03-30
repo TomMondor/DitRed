@@ -3,7 +3,7 @@
 		<div class="user-card-container">
 			<user-card
 				:name="userData.username"
-				:timestamp="userData.memberSince.slice(5, 16)"
+				:timestamp="userData.memberSince"
 				:bio="userData.bio"
 			/>
 		</div>
