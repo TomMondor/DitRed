@@ -6,6 +6,7 @@ import Convo from "@/pages/Convo";
 import Subs from "@/pages/Subs";
 import Sub from "@/pages/Sub";
 import SubPost from "@/pages/SubPost";
+import Signup from "@/pages/Signup";
 
 Vue.use(Router);
 
@@ -40,6 +41,11 @@ export default new Router({
             path: "/sub-post",
             name: "SubPost",
             component: SubPost,
+        },
+        {
+            path: "/signup",
+            name: "Signup",
+            component: Signup,
         },
     ],
 });
