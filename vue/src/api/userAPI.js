@@ -27,7 +27,7 @@ export const createUser = async function (username, password, email, bio, age) {
         method: "post",
         body: JSON.stringify({
             username: username,
-            password: password, //TODO should password be hashed here?
+            password: password,
             email: email,
             bio: bio,
             age: age,

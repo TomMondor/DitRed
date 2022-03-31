@@ -42,7 +42,6 @@ class UserAssembler:
         self.__check_user_username(request['username'])
         self.__check_user_bio(request['bio'])
         self.__check_user_age(request['age'])
-        self.__check_user_password(request['password'])
 
     def __check_request_fields_present(self, request):
         if not request:
@@ -77,7 +76,3 @@ class UserAssembler:
                 raise InvalidAgeException()
         else:
             raise InvalidAgeException()
-
-    def __check_user_password(self, password):
-        if not re.match(r'^[0-9a-f]{96}$', str(password)):
-            raise InvalidPasswordException()
