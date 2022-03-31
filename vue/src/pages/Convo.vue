@@ -13,12 +13,12 @@
 			/>
 		</div>
 		<div class="write-message">
-			<textarea
+			<input
 				class="write-message-textarea"
 				v-model="message"
 				placeholder="Write a message..."
 				@keydown.enter="sendMessage"
-			></textarea>
+			/>
 			<button class="write-message-button" @click="sendMessage">Send</button>
 		</div>
 	</div>
@@ -26,30 +26,40 @@
 
 <script>
 import { getConvo } from "../api/convoAPI.js";
+import { createMessage } from "../api/convoAPI.js";
 import ConvoBubble from "../components/ConvoBubble.vue";
 
 export default {
 	name: "Convos",
 	components: { ConvoBubble },
 	mounted() {
+		this.getUserId();
 		this.getConvoData();
 	},
 	data: () => {
 		return {
 			convoData: {},
 			myUserId: 17, //TODO get real value
-			userId: 1, //TODO get real value
+			userId: 36, //TODO get real value
+			message: "",
 		};
 	},
 	methods: {
 		async getConvoData() {
 			this.convoData = await getConvo(this.myUserId, this.userId);
 		},
+		async getUserId() {
+			this.userId = this.$router.currentRoute.params.userId;
+		},
+		sendMessage() {
+			createMessage(this.myUserId, this.userId, this.message);
+			this.message = "";
+		},
 	},
 };
 </script>
 
-<style>
+<style scoped>
 .convo-header {
 	color: var(--mainwhite);
 }

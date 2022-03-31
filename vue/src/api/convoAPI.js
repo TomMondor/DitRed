@@ -32,14 +32,15 @@ export const getConvo = async function (myUserId, userId) {
     return jsonResponse; //TODO extract data if necessary
 };
 
-export const createMessage = async function (userId, message) {
+export const createMessage = async function (myUserId, userId, message) {
     const response = await fetch(`${BASE_URL}/convo/${userId}`, {
         method: "post",
         body: JSON.stringify({
             message: message,
         }),
         headers: new Headers({
-            "Content-Type": "application/json", //TODO needs the token
+            "Content-Type": "application/json",
+            user_id: myUserId, //TODO needs the token (remove myUserId input when done)
         }),
     });
 
