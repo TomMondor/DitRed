@@ -12,3 +12,10 @@ class SubPostsRepository(Repository):
     def get_post(self, post_id):
         self.cursor.execute(f"SELECT * FROM Subposts WHERE id = '{post_id}'")
         return self.cursor.fetchone()
+
+    def create_post(self, sub_id, title, content, creator_id):
+        self.cursor.execute(
+            f"INSERT INTO Subposts (sub_id, creator_id, timestamp, title, content, score, comments_count)" +
+            f" VALUES ({sub_id}, {creator_id}, NOW(), '{title}', '{content}', 0, 0)"
+        )
+        return self.cursor.lastrowid

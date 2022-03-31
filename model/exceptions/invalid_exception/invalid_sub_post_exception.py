@@ -4,3 +4,13 @@ from exceptions.invalid_exception.invalid_parameter_exception import InvalidPara
 class InvalidSubPostIdException(InvalidParameterException):
     def __init__(self):
         super().__init__("Invalid sub post id")
+
+
+class InvalidSubPostTitleException(InvalidParameterException):
+    def __init__(self):
+        super().__init__("Invalid sub post title")
+
+
+class InvalidSubPostContentException(InvalidParameterException):
+    def __init__(self):
+        super().__init__("Invalid sub post content")
