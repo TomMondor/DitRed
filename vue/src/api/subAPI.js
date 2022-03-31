@@ -44,12 +44,13 @@ export const getSubPost = async function (subId, postId) {
 	return jsonResponse; //TODO extract data if necessary
 };
 
-export const createSub = async function (subName, subDescription) {
+export const createSub = async function (userId, subName, subDescription) {
 	const response = await fetch(`${BASE_URL}/subs`, {
 		method: "post",
 		body: JSON.stringify({
-			subName: subName,
-			subDescription: subDescription,
+			name: subName,
+			description: subDescription,
+			creator_id: userId,
 		}),
 		headers: new Headers({
 			"Content-Type": "application/json", //TODO needs the token
@@ -59,14 +60,22 @@ export const createSub = async function (subName, subDescription) {
 	if (response.status != 201) {
 		throw new Error("Could not create sub.");
 	}
+	const jsonResponse = await response.json();
+	return jsonResponse;
 };
 
-export const updateSub = async function (subId, subName, subDescription) {
+export const updateSub = async function (
+	userId,
+	subId,
+	subName,
+	subDescription
+) {
 	const response = await fetch(`${BASE_URL}/subs/${subId}`, {
 		method: "post", // TODO PUT ?
 		body: JSON.stringify({
-			subName: subName,
-			subDescription: subDescription,
+			name: subName,
+			description: subDescription,
+			creator_id: userId,
 		}),
 		headers: new Headers({
 			"Content-Type": "application/json", //TODO needs the token
@@ -76,6 +85,8 @@ export const updateSub = async function (subId, subName, subDescription) {
 	if (response.status != 201) {
 		throw new Error("Could not update sub.");
 	}
+	const jsonResponse = await response.json();
+	return jsonResponse;
 };
 
 export const subscribe = async function (subId) {
@@ -91,12 +102,18 @@ export const subscribe = async function (subId) {
 	}
 };
 
-export const createSubPost = async function (subId, postTitle, postContent) {
+export const createSubPost = async function (
+	userId,
+	subId,
+	postTitle,
+	postContent
+) {
 	const response = await fetch(`${BASE_URL}/subs/${subId}/posts`, {
 		method: "post",
 		body: JSON.stringify({
-			postTitle: postTitle,
-			postContent: postContent,
+			title: postTitle,
+			content: postContent,
+			creator_id: userId,
 		}),
 		headers: new Headers({
 			"Content-Type": "application/json", //TODO needs the token
@@ -106,6 +123,8 @@ export const createSubPost = async function (subId, postTitle, postContent) {
 	if (response.status != 201) {
 		throw new Error("Could not create sub post.");
 	}
+	const jsonResponse = await response.json();
+	return jsonResponse;
 };
 
 export const voteOnSubPost = async function (subId, postId, vote) {
