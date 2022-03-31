@@ -52,3 +52,14 @@ class UsersRepository(Repository):
     def get_wallposts(self, user_id):
         self.cursor.execute(f"""SELECT message FROM WallPosts WHERE user_id = {user_id}""")
         return self.cursor.fetchall()
+
+    def verify_login(self, user_info):
+        self.cursor.execute(f"""SELECT * FROM Users WHERE username = '{user_info['username']}'""")
+        user = self.cursor.fetchone()
+        if user is None:
+            raise InvalidUsernameException()
+
+        self.cursor.execute(f"""SELECT * FROM Passwords WHERE user_id = {user[0]}""")
+        hashed_password = self.cursor.fetchone()[1]
+        if not hashed_password == user_info['password']:
+            raise InvalidPasswordException()

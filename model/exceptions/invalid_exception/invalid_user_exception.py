@@ -9,7 +9,7 @@ class InvalidUserIdException(InvalidParameterException):
 
 class InvalidUsernameException(InvalidParameterException):
     def __init__(self):
-        super().__init__("Invalid user name")
+        super().__init__("Invalid username")
 
 
 class InvalidPasswordException(InvalidParameterException):

@@ -5,6 +5,7 @@ from repositories.users_repository import UsersRepository
 from repositories.subs_repository import SubsRepository
 from repositories.subposts_repository import SubPostsRepository
 from repositories.comments_repository import CommentsRepository
+from repositories.login_tokens_repository import LoginTokensRepository
 
 from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
@@ -35,6 +36,8 @@ comments_assembler = CommentAssembler()
 messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
 
+login_tokens_repository = LoginTokensRepository()
+
 
 @app.after_request
 def apply_caching(response):
@@ -61,6 +64,16 @@ def handle_exception(e):
 @app.route("/")  # TODO remove (or replace by sending frontend files)
 def start_page():
     return "<p>Welcome to DitRed<p>"
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    user_info = request.get_json()
+    users_repository.verify_login(user_info)
+    token = login_tokens_repository.create_login_token(user_info)
+    response = jsonify({"token": token})
+
+    return response
 
 
 @app.route("/users", methods=["GET"])
