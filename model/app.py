@@ -175,6 +175,23 @@ def put_sub(sub_id):
     return jsonify(sub_assembler.assemble_sub(updated_sub_content))
 
 
+# TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts", methods=["POST"])
+def post_sub_post(sub_id):
+    content = request.get_json()
+    sub_post_assembler.check_create_sub_post_request(content)
+
+    creator = users_repository.get_user(content["creator_id"])
+    sub = subs_repository.get_sub(sub_id)
+    if creator is None:
+        raise InvalidUserIdException()
+    if sub is None:
+        raise InvalidSubIdException()
+    sub_post_id = sub_posts_repository.create_post(sub_id, content["title"], content["content"], content["creator_id"])
+
+    return {"sub_post_id": sub_post_id}, 201
+
+
 # TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
 def get_convo():
