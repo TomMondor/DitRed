@@ -1,12 +1,8 @@
 <template>
-    <div class="test">Signup!</div>
+    <div class="signup-container">Signup!</div>
 </template>
 
 <script>
-import { getUser } from "../api/userAPI.js";
-import WallPostCard from "../components/WallPostCard.vue";
-import UserCard from "../components/UserCard.vue";
-
 export default {
     name: "Signup",
     components: {},
@@ -19,7 +15,8 @@ export default {
 </script>
 
 <style scoped>
-.test {
+.signup-container {
+    height: 100vh;
     color: aqua;
 }
 </style>

@@ -55,7 +55,7 @@ export default {
     align-items: center;
     gap: 2vw;
 
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
     width: 100%;

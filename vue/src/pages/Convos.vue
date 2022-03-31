@@ -40,7 +40,7 @@ export default {
 }
 
 .convos-container {
-    margin-top: 7rem;
+    margin-top: 5rem;
     margin-bottom: 7rem;
     display: flex;
     flex-direction: column;
