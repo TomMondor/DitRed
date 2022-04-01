@@ -7,6 +7,7 @@ from repositories.subs_repository import SubsRepository
 from repositories.subposts_repository import SubPostsRepository
 from repositories.comments_repository import CommentsRepository
 from repositories.login_tokens_repository import LoginTokensRepository
+from repositories.chat_ids_repository import ChatIdsRepository
 
 from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
@@ -39,6 +40,8 @@ messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
 
 login_tokens_repository = LoginTokensRepository()
+
+chat_ids_repository = ChatIdsRepository()
 
 
 @app.after_request
@@ -251,7 +254,7 @@ def receive_message_from_user(message):
 @socketio.on('user_id', namespace='/private')
 def receive_user_id(user_id):
     if user_id not in users.keys():
-        users[user_id] = request.sid
+        chat_ids_repository.add_user_chat_id(user_id, request.sid)
     print(f"user_id:{user_id} added")
 
 
@@ -259,7 +262,7 @@ def receive_user_id(user_id):
 def private_message(payload):
     user_id = payload["user_id"]
     message = payload["message"]
-    if user_id in users.keys():
+    if user_id in chat_ids_repository.get_chat_ids_keys():
         emit('new_private message', message, room=users[user_id])
         emit('new_private message', message, room=users[user_id])
 
