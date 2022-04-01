@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_socketio import SocketIO, send, emit
 
 from repositories.messages_repository import MessagesRepository
 from repositories.users_repository import UsersRepository
@@ -20,6 +21,7 @@ from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPo
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 users_repository = UsersRepository()
 user_assembler = UserAssembler()
@@ -237,5 +239,30 @@ def post_message(user_id):
     return response, 201
 
 
+users = {}
+
+
+@socketio.on('message from user', namespace='messages')
+def receive_message_from_user(message):
+    print(f'USER MESSAGE: {message}')
+    emit('user message', message, broadcast=True)
+
+
+@socketio.on('user_id', namespace='/private')
+def receive_user_id(user_id):
+    if user_id not in users.keys():
+        users[user_id] = request.sid
+    print(f"user_id:{user_id} added")
+
+
+@socketio.on('private_message', namespace='/private')
+def private_message(payload):
+    user_id = payload["user_id"]
+    message = payload["message"]
+    if user_id in users.keys():
+        emit('new_private message', message, room=users[user_id])
+        emit('new_private message', message, room=users[user_id])
+
+
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)

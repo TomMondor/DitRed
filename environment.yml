@@ -15,4 +15,4 @@ dependencies:
           - python-lorem
           - Flask
           - flask-restful
-          - python-socketio
+          - flask-socketio
