@@ -22,9 +22,13 @@
                 placeholder="Write a message..."
                 @keydown.enter="sendMessage"
             />
-            <button class="write-message-button" @click="sendMessage">
-                Send
-            </button>
+            <div class="write-message-button">
+                <font-awesome-icon
+                    class="send-icon"
+                    icon="fa-solid fa-paper-plane"
+                    @click="sendMessage"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -137,12 +141,30 @@ export default {
     width: 80%;
     display: flex;
     height: fit-content;
-    padding-left: 1rem;
-    padding-top: 1rem;
+    padding: 1rem;
 
     font-size: 1.3rem;
 }
 
 .write-message-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--background);
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: var(--mainwhite);
+    border-radius: 50%;
+}
+
+.write-message-button:hover {
+    cursor: pointer;
+    color: var(--primary);
+}
+
+.send-icon {
+    margin-left: -10%;
+    width: 60%;
+    height: 60%;
 }
 </style>
