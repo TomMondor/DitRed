@@ -1,35 +1,37 @@
 <template>
-    <div class="header">
-        <div class="logo-container">
+    <div class="hp-header">
+        <div class="hp-logo-container">
             <img
                 src="../../../public/DitRed-logo.png"
-                class="ditred-logo"
+                class="hp-ditred-logo"
                 alt="ditred-logo"
             />
-            <div class="ditred-text">ditred</div>
+            <div class="hp-ditred-text">ditred</div>
         </div>
-        <div class="display-links">
+        <div class="hp-display-links">
             <router-link to="/"
                 ><font-awesome-icon
-                    class="header-icon"
+                    class="hp-header-icon"
                     icon="fa-solid fa-list-ul"
             /></router-link>
             <router-link to="/user"
-                ><font-awesome-icon class="header-icon" icon="fa-solid fa-user"
+                ><font-awesome-icon
+                    class="hp-header-icon"
+                    icon="fa-solid fa-user"
             /></router-link>
             <router-link to="/conversations"
                 ><font-awesome-icon
-                    class="header-icon"
+                    class="hp-header-icon"
                     icon="fa-solid fa-comment-dots"
             /></router-link>
             <router-link to="/sub"
                 ><font-awesome-icon
-                    class="header-icon"
+                    class="hp-header-icon"
                     icon="fa-solid fa-users"
             /></router-link>
             <router-link to="/sub-post"
                 ><font-awesome-icon
-                    class="header-icon"
+                    class="hp-header-icon"
                     icon="fa-solid fa-chalkboard-user"
             /></router-link>
         </div>
@@ -45,12 +47,12 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
-.display-links {
+.hp-display-links {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
-.header {
+.hp-header {
     display: flex;
     align-items: center;
     gap: 2vw;
@@ -65,16 +67,16 @@ export default {
     background-color: var(--background);
 }
 
-.header-icon {
+.hp-header-icon {
     height: 1.3rem;
     color: var(--mainwhite);
 }
 
-.header-icon:hover {
+.hp-header-icon:hover {
     color: var(--primary);
 }
 
-.logo-container {
+.hp-logo-container {
     margin-left: 1vw;
     display: flex;
     gap: 0.3rem;
@@ -84,13 +86,13 @@ export default {
     height: 100%;
 }
 
-.ditred-text {
+.hp-ditred-text {
     font-family: "Varela Round", sans-serif;
     font-size: 1.3rem;
     font-weight: bold;
 }
 
-.ditred-logo {
+.hp-ditred-logo {
     height: 2rem;
 }
 </style>
