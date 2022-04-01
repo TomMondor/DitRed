@@ -44,7 +44,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
 .hp-display-links {
@@ -65,6 +65,8 @@ export default {
     height: 3.5rem;
 
     background-color: var(--background);
+
+    z-index: 1000;
 }
 
 .hp-header-icon {
