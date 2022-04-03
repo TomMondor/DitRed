@@ -33,6 +33,7 @@ export const createUser = async function (username, password, email, bio, age) {
             age: age,
         }),
         headers: new Headers({
+            Accept: "application/json",
             "Content-Type": "application/json",
         }),
     });
@@ -40,6 +41,9 @@ export const createUser = async function (username, password, email, bio, age) {
     if (response.status != 201) {
         throw new Error("Could not create user.");
     }
+
+    const jsonResponse = await response.json();
+    return jsonResponse["userId"]; //TODO extract data if necessary
 };
 
 export const createWallPost = async function (ownUserId, wallPostContent) {
