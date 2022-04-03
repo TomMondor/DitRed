@@ -7,6 +7,7 @@ import Subs from "@/pages/Subs";
 import Sub from "@/pages/Sub";
 import SubPost from "@/pages/SubPost";
 import Signup from "@/pages/Signup";
+import Login from "@/pages/Login";
 
 Vue.use(Router);
 
@@ -46,6 +47,11 @@ export default new Router({
             path: "/signup",
             name: "Signup",
             component: Signup,
+        },
+        {
+            path: "/login",
+            name: "Login",
+            component: Login,
         },
     ],
 });
