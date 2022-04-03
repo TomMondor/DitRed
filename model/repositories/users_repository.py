@@ -21,8 +21,9 @@ class UsersRepository(Repository):
 
     def create_user(self, user):
         self.__verify_username_and_email_are_unique(user['username'], user['email'])
-        self.cursor.execute(f"""INSERT INTO Users (email, username, bio, age)
-                            VALUES ('{user['email']}', '{user['username']}', '{user['bio']}', {user['age']});""")
+        self.cursor.execute(f"""INSERT INTO Users (email, username, bio, age, createdAt)
+                            VALUES ('{user['email']}', '{user['username']}', 
+                            '{user['bio']}', {user['age']}, CURDATE());""")
         self.cursor.execute(f"""SELECT id FROM Users WHERE username = '{user['username']}'""")
         user_id = self.cursor.fetchone()[0]
         self.cursor.execute(f"""INSERT INTO Passwords (user_id, hashed_password) 
@@ -62,5 +63,7 @@ class UsersRepository(Repository):
 
         self.cursor.execute(f"""SELECT * FROM Passwords WHERE user_id = {user[0]}""")
         hashed_password = self.cursor.fetchone()[1]
-        if not hashed_password == user_info['password']:
+        if hashed_password != hashlib.sha384(user_info['password'].encode()).hexdigest():
             raise InvalidPasswordException()
+
+        return user[0]
