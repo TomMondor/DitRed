@@ -74,9 +74,9 @@ def start_page():
 @app.route("/login", methods=["POST"])
 def login():
     user_info = request.get_json()
-    users_repository.verify_login(user_info)
-    token = login_tokens_repository.create_login_token(user_info)
-    response = jsonify({"token": token})
+    user_id = users_repository.verify_login(user_info)
+    token = login_tokens_repository.create_login_token(user_id)
+    response = jsonify({"token": token, "user_id": user_id})
 
     return response
 
