@@ -5,13 +5,14 @@
 			<div class="post-overhead">
 				<div class="sub-name">r/{{ subName }}</div>
 				<div>Posted by u/{{ postCreator }}</div>
-				<div>On {{ timestamp }}</div>
+				<div>On {{ timestamp.slice(4, 16) }}</div>
 			</div>
 			<div class="title">{{ title }}</div>
 			<div class="content">{{ content }}</div>
 			<div class="comments">
 				<font-awesome-icon icon="fa-solid fa-message" />
-				<div>{{ comments_count }} comments</div>
+				<div v-if="comments_count == 1">{{ comments_count }} comment</div>
+				<div v-else>{{ comments_count }} comments</div>
 			</div>
 		</div>
 	</div>
@@ -48,6 +49,12 @@ export default {
 	border-radius: 1rem;
 
 	color: grey;
+}
+
+@media screen and (max-width: 1100px) {
+	.container {
+		width: 80vw;
+	}
 }
 
 .post-container {

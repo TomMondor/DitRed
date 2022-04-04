@@ -15,7 +15,10 @@
 			<div class="sub-description">{{ subData.description }}</div>
 			<div class="display-row">
 				<div>{{ subData.subscribers_count }} subscribers</div>
-				<div>Created on {{ subData.timestamp.slice(5, 16) }}</div>
+				<div>
+					Created on {{ subData.timestamp.slice(5, 16) }} by
+					{{ subData.creator_name }}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -62,17 +65,26 @@ export default {
 	color: grey;
 	border-radius: 1rem;
 }
+
+@media screen and (max-width: 1100px) {
+	.sub-container {
+		width: 80vw;
+	}
+}
+
 .display-row {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-start;
 }
+
 .sub-name {
 	color: white;
 	font-size: 1.5rem;
 	cursor: pointer;
 }
+
 .subscribe-button {
 	padding: 0.5rem;
 	border-radius: 1rem;
@@ -80,21 +92,16 @@ export default {
 	color: black;
 	font-weight: bold;
 }
+
 .subscribe-button:hover {
 	background-color: orangered;
 	cursor: pointer;
 }
+
 .sub-description {
 	border-radius: 1rem;
 	background-color: rgb(73, 73, 73);
 	color: white;
 	padding: 1rem;
-}
-.colors-def {
-	--primary: orangered;
-	--secondary: grey;
-	--background: #222222;
-	--backgroundlighter: rgb(63, 62, 62);
-	--mainwhite: #ffffff;
 }
 </style>
