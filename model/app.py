@@ -126,7 +126,11 @@ def post_wall_post(user_id):
 @app.route("/subs", methods=["GET"])
 def get_subs():
     subs = subs_repository.get_subs()
-    response = jsonify(sub_assembler.assemble_subs(subs))
+    authors = {}
+    for sub in subs:
+        user_id = sub[2]
+        authors[user_id] = users_repository.get_username(user_id)
+    response = jsonify(sub_assembler.assemble_subs(subs, authors))
 
     return response
 
@@ -136,7 +140,8 @@ def get_sub(sub_id):
     sub = subs_repository.get_sub(sub_id)
     if sub is None:
         raise InvalidSubIdException()
-    response = jsonify(sub_assembler.assemble_sub(sub))
+    author = users_repository.get_username(sub[2])
+    response = jsonify(sub_assembler.assemble_sub(sub, author))
 
     return response
 
