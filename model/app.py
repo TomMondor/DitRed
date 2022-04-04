@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, emit
 
 from repositories.messages_repository import MessagesRepository
 from repositories.users_repository import UsersRepository
@@ -14,6 +14,7 @@ from assemblers.user_assembler import UserAssembler
 from assemblers.sub_assembler import SubAssembler
 from assemblers.subpost_assembler import SubPostAssembler
 from assemblers.comment_assembler import CommentAssembler
+from assemblers.validate_assembler import ValidateAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
@@ -40,6 +41,7 @@ messages_repository = MessagesRepository()
 messages_assembler = MessageAssembler()
 
 login_tokens_repository = LoginTokensRepository()
+validate_assembler = ValidateAssembler()
 
 chat_ids_repository = ChatIdsRepository()
 
@@ -47,7 +49,7 @@ chat_ids_repository = ChatIdsRepository()
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
-    response.headers["Access-Control-Allow-Headers"] = "user_id,content-type"
+    response.headers["Access-Control-Allow-Headers"] = "userId,loginToken,content-type"
 
     return response
 
@@ -213,7 +215,7 @@ def post_sub_post(sub_id):
 # TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
 def get_convo():
-    id = request.headers.get("user_id")
+    id = request.headers.get("userId")
     users = messages_repository.get_convos(id)
     response = jsonify(messages_assembler.assemble_users(users))
 
@@ -223,7 +225,7 @@ def get_convo():
 # TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo/<int:user_id>", methods=["GET"])
 def get_specific_convo(user_id):
-    current_id = request.headers.get("user_id")
+    current_id = request.headers.get("userId")
     convo = messages_repository.get_convo(current_id, user_id)
     response = jsonify(messages_assembler.assemble_convo(convo))
 
@@ -233,7 +235,7 @@ def get_specific_convo(user_id):
 # TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo/<int:user_id>", methods=["POST"])
 def post_message(user_id):
-    current_id = request.headers.get("user_id")
+    current_id = request.headers.get("userId")
     req = request.get_json()
     content = req["message"]
     message = messages_repository.create_message(current_id, user_id, content)
@@ -242,7 +244,12 @@ def post_message(user_id):
     return response, 201
 
 
-users = {}
+@app.route("/validate", methods=["GET"])
+def validate_user():
+    user_id = request.headers.get("userId")
+    login_token = request.headers.get("loginToken")
+    response = jsonify(validate_assembler.assemble_validation(user_id, login_token, login_tokens_repository))
+    return response
 
 
 @socketio.on('message from user', namespace='messages')
@@ -253,18 +260,15 @@ def receive_message_from_user(message):
 
 @socketio.on('user_id', namespace='/private')
 def receive_user_id(user_id):
-    if user_id not in users.keys():
-        chat_ids_repository.add_user_chat_id(user_id, request.sid)
-    print(f"user_id:{user_id} added")
+    chat_ids_repository.add_user_chat_id(user_id, request.sid)
 
 
 @socketio.on('private_message', namespace='/private')
 def private_message(payload):
-    user_id = payload["user_id"]
+    user_id = payload["userId"]
     message = payload["message"]
     if user_id in chat_ids_repository.get_chat_ids_keys():
-        emit('new_private message', message, room=users[user_id])
-        emit('new_private message', message, room=users[user_id])
+        emit('new_private_message', message, room=chat_ids_repository.get_chat_id_by_user_id(user_id))
 
 
 if __name__ == '__main__':

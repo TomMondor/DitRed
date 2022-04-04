@@ -10,3 +10,6 @@ class ChatIdsRepository():
 
     def get_chat_ids_keys(self):
         return self.chat_ids.keys()
+
+    def get_chat_id_by_user_id(self, user_id):
+        return self.chat_ids[user_id]

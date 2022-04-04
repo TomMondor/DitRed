@@ -13,6 +13,7 @@
 <script>
 import { getConvos } from "../api/convoAPI.js";
 import ConvoWithUserCard from "../components/ConvoWithUserCard.vue";
+import Cookies from "js-cookie";
 
 export default {
     name: "Convos",
@@ -23,7 +24,7 @@ export default {
     data: () => {
         return {
             convosData: {},
-            userId: 17, //TODO get real value
+            userId: Cookies.get("userId"),
         };
     },
     methods: {

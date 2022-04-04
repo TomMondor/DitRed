@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="test" class="convo-container">
+        <div :key="convoBubblesKey" class="convo-container">
             <h1 class="convo-header">Convo:</h1>
             <convo-bubble
                 v-for="(messageData, messageId) in convoData"
@@ -37,6 +37,7 @@
 import { getConvo } from "../api/convoAPI.js";
 import { createMessage } from "../api/convoAPI.js";
 import ConvoBubble from "../components/ConvoBubble.vue";
+import Cookies from "js-cookie";
 
 const { v4: uuidv4 } = require("uuid");
 const io = require("socket.io-client");
@@ -49,15 +50,13 @@ export default {
         this.getConvoData();
         this.setUpPrivateMessageSocket();
         this.setUpReceiveMessages();
-        console.log(document.getElementById("test").scrollHeight);
-        document.getElementById("test").scrollTop =
-            document.getElementById("test").scrollHeight;
     },
     data: () => {
         return {
             convoData: {},
-            myUserId: 17, //TODO get real value
+            myUserId: Cookies.get("userId"),
             message: "",
+            convoBubblesKey: 0,
         };
     },
     methods: {
@@ -70,10 +69,14 @@ export default {
         sendMessage() {
             if (this.message) {
                 this.private_socket.emit("private_message", {
-                    user_id: this.userId,
+                    userId: this.userId,
                     message: this.message,
                 });
-                this.createNewMessageItem(this.message, this.myUserId);
+                this.createNewMessageItem(
+                    this.message,
+                    this.userId,
+                    this.myUserId
+                );
                 createMessage(this.myUserId, this.userId, this.message);
             }
             this.message = "";
@@ -83,18 +86,23 @@ export default {
             this.private_socket.emit("user_id", this.myUserId);
         },
         setUpReceiveMessages() {
-            this.private_socket.on("new_private_message", function (message) {
-                this.createNewMessageItem(message, this.userId);
+            this.private_socket.on("new_private_message", (message) => {
+                this.createNewMessageItem(message, this.myUserId, this.userId);
             });
         },
-        createNewMessageItem(message, userId) {
+        createNewMessageItem(message, receiverId, senderId) {
             const messageId = uuidv4();
             const messageData = {
                 content: message,
-                sender_id: userId,
+                receiver_id: receiverId,
+                sender_id: senderId,
                 timestamp: new Date().toLocaleString(),
             };
             this.convoData[messageId] = messageData;
+            this.forceUpdate();
+        },
+        forceUpdate() {
+            this.convoBubblesKey++;
         },
     },
 };

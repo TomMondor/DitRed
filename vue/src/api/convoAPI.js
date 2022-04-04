@@ -4,7 +4,7 @@ export const getConvos = async function (userId) {
     const response = await fetch(`${BASE_URL}/convo`, {
         method: "get",
         headers: new Headers({
-            user_id: userId, //TODO needs the token (remove userId input when done)
+            userId: userId, //TODO needs the token (remove userId input when done)
         }),
     });
 
@@ -20,7 +20,7 @@ export const getConvo = async function (myUserId, userId) {
     const response = await fetch(`${BASE_URL}/convo/${userId}`, {
         method: "get",
         headers: new Headers({
-            user_id: myUserId, //TODO needs the token (remove myUserId input when done)
+            userId: myUserId, //TODO needs the token (remove myUserId input when done)
         }),
     });
 
@@ -40,7 +40,7 @@ export const createMessage = async function (myUserId, userId, message) {
         }),
         headers: new Headers({
             "Content-Type": "application/json",
-            user_id: myUserId, //TODO needs the token (remove myUserId input when done)
+            userId: myUserId, //TODO needs the token (remove myUserId input when done)
         }),
     });
 
