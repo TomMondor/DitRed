@@ -69,6 +69,7 @@ export default {
         sendMessage() {
             if (this.message) {
                 this.private_socket.emit("private_message", {
+                    myUserId: this.myUserId,
                     userId: this.userId,
                     message: this.message,
                 });
@@ -86,8 +87,14 @@ export default {
             this.private_socket.emit("user_id", this.myUserId);
         },
         setUpReceiveMessages() {
-            this.private_socket.on("new_private_message", (message) => {
-                this.createNewMessageItem(message, this.myUserId, this.userId);
+            this.private_socket.on("new_private_message", (payload) => {
+                if (Object.keys(payload)[0] == this.userId) {
+                    this.createNewMessageItem(
+                        payload[this.userId],
+                        this.myUserId,
+                        this.userId
+                    );
+                }
             });
         },
         createNewMessageItem(message, receiverId, senderId) {
