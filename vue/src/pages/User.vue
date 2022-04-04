@@ -23,6 +23,7 @@
 import { getUser } from "../api/userAPI.js";
 import WallPostCard from "../components/WallPostCard.vue";
 import UserCard from "../components/UserCard.vue";
+import Cookies from "js-cookie";
 
 export default {
     name: "User",
@@ -36,7 +37,7 @@ export default {
     data: () => {
         return {
             userData: {},
-            userId: 17, //TODO get real value
+            userId: Cookies.get("userId"),
         };
     },
     methods: {
