@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000"; //TODO put the right PORT
+const BASE_URL = "http://localhost:5000";
 
 export const getSubs = async function () {
 	const response = await fetch(`${BASE_URL}/subs`);
