@@ -44,15 +44,11 @@ export default {
     },
     methods: {
         async login() {
-            console.log("login");
             const username = document.getElementById("username-input").value;
             const password = document.getElementById("password-input").value;
             const loginResponse = await login(username, password);
             const loginToken = loginResponse["token"];
             const userId = loginResponse["user_id"];
-
-            console.log(`login_token: ${loginToken}`);
-            console.log(`userId: ${userId}`);
 
             Cookies.set("userId", userId, {
                 SameSite: "Strict",

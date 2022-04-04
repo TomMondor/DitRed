@@ -11,7 +11,7 @@ import Login from "@/pages/Login";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: "/",
@@ -27,11 +27,13 @@ export default new Router({
             path: "/conversations",
             name: "Convos",
             component: Convos,
+            meta: { requiresAuth: true },
         },
         {
             path: "/conversations/:userId",
             name: "Convo",
             component: Convo,
+            meta: { requiresAuth: true },
         },
         {
             path: "/sub",
@@ -55,3 +57,19 @@ export default new Router({
         },
     ],
 });
+
+import { validateCookies } from "@/api/loginAPI";
+
+router.beforeEach(async (to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (await validateCookies()) {
+            next();
+            return;
+        }
+        next("/login");
+    } else {
+        next();
+    }
+});
+
+export default router;

@@ -18,5 +18,28 @@ export const login = async function (username, password) {
     }
 
     const jsonResponse = await response.json();
-    return jsonResponse; //TODO extract data if necessary
+    return jsonResponse;
+};
+
+import Cookies from "js-cookie";
+
+export const validateCookies = async function () {
+    const userId = Cookies.get("userId");
+    const loginToken = Cookies.get("loginToken");
+
+    const response = await fetch(`${BASE_URL}/validate`, {
+        method: "get",
+        headers: new Headers({
+            userId: userId,
+            loginToken: loginToken,
+        }),
+    });
+
+    if (response.status != 200) {
+        throw new Error("Could not validate cookies");
+    }
+
+    const jsonResponse = await response.json();
+
+    return jsonResponse["valid"];
 };

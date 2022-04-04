@@ -57,7 +57,6 @@ export default {
     },
     methods: {
         async signup() {
-            console.log("signup");
             const email = document.getElementById("email-input").value;
             const username = document.getElementById("username-input").value;
             const password = document.getElementById("password-input").value;
