@@ -22,6 +22,7 @@ const router = new Router({
             path: "/user",
             name: "User",
             component: User,
+            meta: { requiresAuth: true },
         },
         {
             path: "/conversations",
