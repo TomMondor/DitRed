@@ -265,10 +265,11 @@ def receive_user_id(user_id):
 
 @socketio.on('private_message', namespace='/private')
 def private_message(payload):
+    my_user_id = payload['myUserId']
     user_id = payload["userId"]
     message = payload["message"]
     if user_id in chat_ids_repository.get_chat_ids_keys():
-        emit('new_private_message', message, room=chat_ids_repository.get_chat_id_by_user_id(user_id))
+        emit('new_private_message', {my_user_id: message}, room=chat_ids_repository.get_chat_id_by_user_id(user_id))
 
 
 if __name__ == '__main__':
