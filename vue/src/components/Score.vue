@@ -1,21 +1,36 @@
 <template>
-	<div class="score-container">
-		<font-awesome-icon icon="fa-solid fa-arrow-up" class="arrow arrow-up" />
+	<div :class="[isSmall ? 'score-container-small' : 'score-container']">
+		<font-awesome-icon
+			icon="fa-solid fa-arrow-up"
+			class="arrow-up"
+			:class="[isSmall ? 'arrow-small' : 'arrow']"
+		/>
 		<div class="score-text" :class="[score < 0 ? 'center-when-neg' : '']">
 			{{ score }}
 		</div>
-		<font-awesome-icon icon="fa-solid fa-arrow-down" class="arrow arrow-down" />
+		<font-awesome-icon
+			icon="fa-solid fa-arrow-down"
+			class="arrow-down"
+			:class="[isSmall ? 'arrow-small' : 'arrow']"
+		/>
 	</div>
 </template>
 
 <script>
 export default {
 	name: "Score",
-	props: ["score"],
+	props: ["score", "isSmall"],
+	methods: {
+		upvote() {
+			this.$emit("upvote");
+		},
+		downvote() {
+			this.$emit("downvote");
+		},
+	},
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .score-container {
 	display: flex;
@@ -25,6 +40,15 @@ export default {
 	height: fit-content;
 	padding: 1rem;
 
+	justify-content: center;
+}
+
+.score-container-small {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	width: fit-content;
+	height: fit-content;
 	justify-content: center;
 }
 
@@ -41,6 +65,12 @@ export default {
 	color: grey;
 	height: 1.5rem;
 	width: 1.5rem;
+}
+
+.arrow-small {
+	color: grey;
+	height: 1rem;
+	width: 1rem;
 }
 
 .arrow:hover {
