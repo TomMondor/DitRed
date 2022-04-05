@@ -42,7 +42,7 @@ const router = new Router({
 			component: Sub,
 		},
 		{
-			path: "/sub-post",
+			path: "/sub-post/:subPostId",
 			name: "SubPost",
 			component: SubPost,
 		},

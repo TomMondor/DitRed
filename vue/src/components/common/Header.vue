@@ -20,11 +20,6 @@
 					class="hp-header-icon"
 					icon="fa-solid fa-comment-dots"
 			/></router-link>
-			<router-link to="/sub-post"
-				><font-awesome-icon
-					class="hp-header-icon"
-					icon="fa-solid fa-chalkboard-user"
-			/></router-link>
 		</div>
 	</div>
 </template>
