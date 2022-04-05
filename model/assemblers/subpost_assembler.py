@@ -28,6 +28,11 @@ class SubPostAssembler:
         post['comments'] = comments
         return post
 
+    def check_vote_sub_post_request(self, request):
+        self.__check_request_exists(request)
+        self.__check_vote_request_parameters_not_empty(request)
+        self.__check_vote_request_parameters_types(request)
+
     def check_create_sub_post_request(self, request):
         self.__check_request_exists(request)
         self.__check_request_parameters_not_empty(request)
@@ -37,6 +42,18 @@ class SubPostAssembler:
     def __check_request_exists(self, request):
         if request is None:
             raise MissingSubPostException()
+
+    def __check_vote_request_parameters_not_empty(self, request):
+        if "vote" not in request or "voter_id" not in request:
+            raise MissingSubPostVoteException()
+        if request["vote"] is None or request["voter_id"] is None:
+            raise MissingSubPostVoteException()
+
+    def __check_vote_request_parameters_types(self, request):
+        if not isinstance(request["voter_id"], str):
+            raise InvalidUserIdException()
+        if not isinstance(request["vote"], str) :
+            raise InvalidSubPostVoteException()
 
     def __check_request_parameters_not_empty(self, request):
         if "title" not in request or "content" not in request or "creator_id" not in request:

@@ -14,3 +14,7 @@ class InvalidSubPostTitleException(InvalidParameterException):
 class InvalidSubPostContentException(InvalidParameterException):
     def __init__(self):
         super().__init__("Invalid sub post content")
+
+class InvalidSubPostVoteException(InvalidParameterException):
+    def __init__(self):
+        super().__init__("Invalid sub post vote")

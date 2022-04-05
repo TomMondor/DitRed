@@ -211,6 +211,23 @@ def post_sub_post(sub_id):
 
     return {"sub_post_id": sub_post_id}, 201
 
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/vote", methods=["POST"])
+def post_sub_post_vote(sub_id, sub_post_id):
+    print(sub_post_id)
+    content = request.get_json()
+    sub_post_assembler.check_vote_sub_post_request(content)
+
+    voter = users_repository.get_user(content["voter_id"])
+    sub_post = sub_posts_repository.get_post(sub_post_id)
+    if voter is None:
+        raise InvalidUserIdException()
+    if sub_post is None:
+        raise InvalidSubPostIdException()
+    sub_posts_repository.create_vote(sub_post_id, content["voter_id"], content["vote"])
+
+    return {}, 201
+
 
 # TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
