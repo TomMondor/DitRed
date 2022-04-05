@@ -183,6 +183,7 @@ export const createSubPostCommentAnswer = async function (
         {
             method: "post",
             body: JSON.stringify({
+                user_id: userId,
                 comment: comment,
             }),
             headers: new Headers({

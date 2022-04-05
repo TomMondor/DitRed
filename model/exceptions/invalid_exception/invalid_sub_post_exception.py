@@ -22,3 +22,7 @@ class InvalidSubPostVoteException(InvalidParameterException):
 class InvalidSubPostCommentException(InvalidParameterException):
     def __init__(self):
         super().__init__("Invalid sub post comment")
+
+class InvalidAnsweredCommentIdException(InvalidParameterException):
+    def __init__(self):
+        super().__init__("Invalid answered comment")

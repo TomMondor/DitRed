@@ -20,6 +20,7 @@ from exceptions.invalid_exception.invalid_parameter_exception import InvalidPara
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
 from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostIdException
+from exceptions.invalid_exception.invalid_sub_post_exception import InvalidAnsweredCommentIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 app = Flask(__name__)
@@ -241,6 +242,26 @@ def post_sub_post_comment(sub_id, sub_post_id):
     if sub_post is None:
         raise InvalidSubPostIdException()
     comment_id = comments_repository.create_comment(sub_post_id, content["user_id"], content["comment"])
+
+    return {"sub_post_comment_id": comment_id}, 201
+
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments/<int:comment_id>", methods=["POST"])
+def post_sub_post_comment_answer(sub_id, sub_post_id, comment_id):
+    content = request.get_json()
+    sub_post_assembler.check_comment_sub_post_request(content)
+
+    creator = users_repository.get_user(content["user_id"])
+    sub_post = sub_posts_repository.get_post(sub_post_id)
+    original_comment = comments_repository.get_comment(comment_id)
+    if creator is None:
+        raise InvalidUserIdException()
+    if sub_post is None:
+        raise InvalidSubPostIdException()
+    if original_comment is None:
+        raise InvalidAnsweredCommentIdException()
+    comment_id = comments_repository.create_comment_answer(sub_post_id, comment_id, content["user_id"], content["comment"])
 
     return {"sub_post_comment_id": comment_id}, 201
 
