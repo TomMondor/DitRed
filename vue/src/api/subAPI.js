@@ -147,12 +147,18 @@ export const voteOnSubPost = async function (userId, subId, postId, vote) {
     }
 };
 
-export const createSubPostComment = async function (subId, postId, comment) {
+export const createSubPostComment = async function (
+    userId,
+    subId,
+    postId,
+    comment
+) {
     const response = await fetch(
         `${BASE_URL}/subs/${subId}/posts/${postId}/comments`,
         {
             method: "post",
             body: JSON.stringify({
+                user_id: userId,
                 comment: comment,
             }),
             headers: new Headers({

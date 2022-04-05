@@ -8,3 +8,7 @@ class MissingSubPostException(MissingParameterException):
 class MissingSubPostVoteException(MissingParameterException):
     def __init__(self):
         super().__init__("Missing fields in sub post vote")
+
+class MissingSubPostCommentException(MissingParameterException):
+    def __init__(self):
+        super().__init__("Missing fields in sub post comment")
