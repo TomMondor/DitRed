@@ -1,14 +1,12 @@
 <template>
 	<div>
-		<div class="sub-container">
+		<div class="sub-container" @click="redirectToSubPage">
 			<div class="display-row">
-				<span class="sub-name" @click="redirectToSubPage"
-					>r/{{ subData.name }}</span
-				>
+				<span class="sub-name">r/{{ subData.name }}</span>
 				<span
 					class="subscribe-button"
 					v-if="userId != undefined"
-					@click="subscribe"
+					@click.stop="subscribe"
 					>Subscribe</span
 				>
 			</div>
@@ -56,14 +54,16 @@ export default {
 .sub-container {
 	display: flex;
 	flex-direction: column;
+	gap: 1rem;
+
 	width: 50vw;
 	height: fit-content;
 	padding: 1rem;
-	gap: 1rem;
+	border-radius: 1rem;
+	cursor: pointer;
 
 	background-color: #222222;
 	color: grey;
-	border-radius: 1rem;
 }
 
 @media screen and (max-width: 1100px) {
@@ -82,7 +82,6 @@ export default {
 .sub-name {
 	color: white;
 	font-size: 1.5rem;
-	cursor: pointer;
 }
 
 .subscribe-button {

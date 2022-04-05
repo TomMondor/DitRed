@@ -1,5 +1,6 @@
 <template>
 	<div class="comment-level">
+		<!-- TODO add option to reply (emit event? -> sucks because recursive components) -->
 		<div class="comment">
 			<div class="display-column">
 				<div class="display-row">

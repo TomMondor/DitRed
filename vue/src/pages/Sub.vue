@@ -13,10 +13,13 @@
 				</div>
 			</div>
 		</div>
+		<!-- TODO ajouter l'option de créer un Sub Post -->
 		<div class="subposts-section">
 			<SubPostCard
 				v-for="(subPost, index) in subPostsData"
 				:key="index"
+				:postId="Number(index)"
+				:subId="subId"
 				:subName="subData.name"
 				:postCreator="subPost.creator_name"
 				:timestamp="subPost.timestamp"
@@ -24,6 +27,7 @@
 				:content="subPost.content"
 				:score="subPost.score"
 				:comments_count="subPost.comments_count"
+				:isALink="true"
 			/>
 		</div>
 	</div>
@@ -93,6 +97,7 @@ export default {
 	width: 100%;
 	height: fit-content;
 	padding-top: 4rem;
+	padding-bottom: 4rem;
 	gap: 4rem;
 }
 </style>

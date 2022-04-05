@@ -1,11 +1,15 @@
 <template>
-	<div class="container">
-		<score :score="score" />
+	<div
+		class="container"
+		:class="[isALink ? 'cursor-pointer' : '']"
+		@click="redirectToSubPostPage"
+	>
+		<Score :score="score" @upvote="upvote" @downvote="downvote" />
 		<div class="post-container">
 			<div class="post-overhead">
 				<div class="sub-name">r/{{ subName }}</div>
 				<div>Posted by u/{{ postCreator }}</div>
-				<div>On {{ timestamp.slice(4, 16) }}</div>
+				<div v-if="timestamp != undefined">On {{ timestamp.slice(4, 16) }}</div>
 			</div>
 			<div class="title">{{ title }}</div>
 			<div class="content">{{ content }}</div>
@@ -20,6 +24,7 @@
 
 <script>
 import Score from "../Score.vue";
+import { voteOnSubPost } from "../../api/subAPI.js";
 
 export default {
 	name: "SubPostCard",
@@ -27,6 +32,8 @@ export default {
 		Score,
 	},
 	props: [
+		"postId",
+		"subId",
 		"subName",
 		"postCreator",
 		"timestamp",
@@ -34,7 +41,25 @@ export default {
 		"content",
 		"score",
 		"comments_count",
+		"isALink",
 	],
+	methods: {
+		redirectToSubPostPage() {
+			if (this.isALink) {
+				this.$router.push(`/sub/${this.subId}/sub-post/${this.postId}`);
+			}
+		},
+		async upvote() {
+			//TODO call api await voteOnSubPost()
+			//if success
+			//this.score++;
+		},
+		async downvote() {
+			//TODO call api await voteOnSubPost()
+			//if success
+			//this.score--;
+		},
+	},
 };
 </script>
 
@@ -103,6 +128,10 @@ export default {
 
 .comments:hover {
 	background: rgba(255, 255, 255, 0.8);
+	cursor: pointer;
+}
+
+.cursor-pointer {
 	cursor: pointer;
 }
 </style>
