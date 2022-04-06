@@ -112,6 +112,17 @@ def post_user():
     return response, 201
 
 
+@app.route("/users/usernames", methods=["GET"])
+def get_usernames():
+    username_substring = request.args.get("username", type=str)
+    usernames = UsersRepository().get_matching_usernames(username_substring)
+    if usernames is None:
+        usernames = []
+    response = jsonify(user_assembler.assemble_usernames(usernames))
+
+    return response
+
+
 @app.route("/users/<int:user_id>", methods=["POST"])
 def post_wall_post(user_id):
     # TODO check user token
@@ -140,7 +151,7 @@ def get_sub(sub_id):
     sub = subs_repository.get_sub(sub_id)
     if sub is None:
         raise InvalidSubIdException()
-    author = users_repository.get_username(sub[2])
+    author = UsersRepository().get_username(sub[2])
     response = jsonify(sub_assembler.assemble_sub(sub, author))
 
     return response
@@ -152,7 +163,7 @@ def get_sub_posts(sub_id):
     authors = {}
     for post in posts:
         user_id = post[2]
-        authors[user_id] = users_repository.get_username(user_id)
+        authors[user_id] = UsersRepository().get_username(user_id)
     response = jsonify(sub_post_assembler.assemble_posts(posts, authors))
 
     return response
