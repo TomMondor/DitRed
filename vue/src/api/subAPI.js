@@ -89,9 +89,12 @@ export const updateSub = async function (
     return jsonResponse;
 };
 
-export const subscribe = async function (subId) {
+export const subscribe = async function (userId, subId) {
     const response = await fetch(`${BASE_URL}/subs/${subId}/subscribe`, {
         method: "post",
+        body: JSON.stringify({
+            user_id: userId,
+        }),
         headers: new Headers({
             //TODO needs the token
         }),

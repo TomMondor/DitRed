@@ -19,9 +19,9 @@ class InvalidSubPostVoteException(InvalidParameterException):
     def __init__(self):
         super().__init__("Invalid sub post vote")
 
-class InvalidSubPostCommentException(InvalidParameterException):
+class InvalidSubPostCommentIdException(InvalidParameterException):
     def __init__(self):
-        super().__init__("Invalid sub post comment")
+        super().__init__("Invalid sub post comment id")
 
 class InvalidAnsweredCommentIdException(InvalidParameterException):
     def __init__(self):

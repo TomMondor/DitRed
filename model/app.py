@@ -19,7 +19,7 @@ from assemblers.validate_assembler import ValidateAssembler
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
-from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostCommentException, InvalidSubPostIdException
+from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostCommentIdException, InvalidSubPostIdException
 from exceptions.invalid_exception.invalid_sub_post_exception import InvalidAnsweredCommentIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
@@ -280,8 +280,21 @@ def post_sub_post_comment_vote(sub_id, sub_post_id, comment_id):
     if sub_post is None:
         raise InvalidSubPostIdException()
     if comment is None:
-        raise InvalidSubPostCommentException()
+        raise InvalidSubPostCommentIdException()
     comments_repository.create_vote(comment_id, content["voter_id"], content["vote"])
+
+    return {}, 201
+
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/subscribe", methods=["POST"])
+def post_sub_subscription(sub_id):
+    content = request.get_json()
+    sub_assembler.check_subscribe_request(content)
+    sub = subs_repository.get_sub(sub_id)
+    if sub is None:
+        raise InvalidSubIdException()
+    subs_repository.create_subscription(content["user_id"], sub_id)
 
     return {}, 201
 
