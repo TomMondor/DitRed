@@ -28,3 +28,9 @@ class CommentsRepository(Repository):
         )
 
         return self.cursor.lastrowid
+
+    def create_vote(self, comment_id, user_id, vote):
+        self.cursor.execute(
+            f"INSERT INTO SubPostCommentsVotes (sub_post_comment_id, user_id, vote)" +
+            f" VALUES ({comment_id}, {user_id}, '{vote}')"
+        )

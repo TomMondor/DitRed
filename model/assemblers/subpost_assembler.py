@@ -34,7 +34,7 @@ class SubPostAssembler:
         self.__check_parameters_types(request)
         self.__check_request_parameters_length(request)
 
-    def check_vote_sub_post_request(self, request):
+    def check_vote_request(self, request):
         self.__check_request_exists(request)
         self.__check_vote_request_parameters_not_empty(request)
         self.__check_vote_request_parameters_types(request)

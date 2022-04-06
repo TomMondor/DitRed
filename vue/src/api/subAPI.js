@@ -173,6 +173,7 @@ export const createSubPostComment = async function (
 };
 
 export const createSubPostCommentAnswer = async function (
+    userId,
     subId,
     postId,
     comment,
@@ -198,6 +199,7 @@ export const createSubPostCommentAnswer = async function (
 };
 
 export const voteOnSubPostComment = async function (
+    userId,
     subId,
     postId,
     commentId,
@@ -208,6 +210,7 @@ export const voteOnSubPostComment = async function (
         {
             method: "post",
             body: JSON.stringify({
+                voter_id: userId,
                 vote: vote,
             }),
             headers: new Headers({
