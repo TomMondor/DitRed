@@ -14,7 +14,7 @@
 							@upvote="upvote"
 							@downvote="downvote"
 						/>
-						{{ commentData.creator_name }} |
+						u/{{ commentData.creator_name }} |
 						{{ commentData.timestamp.slice(4, 16) }}
 					</div>
 				</div>

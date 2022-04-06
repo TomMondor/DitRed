@@ -8,8 +8,9 @@
 					{{ subData.subscribers_count }} subscribers
 				</div>
 				<div v-if="subData.timestamp != undefined">
-					Created on {{ subData.timestamp.slice(4, 16) }} by
-					{{ subData.creator_name }}
+					Created on {{ subData.timestamp.slice(4, 16) }} by u/{{
+						subData.creator_name
+					}}
 				</div>
 			</div>
 		</div>

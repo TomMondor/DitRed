@@ -12,10 +12,14 @@
 			</div>
 			<div class="sub-description">{{ subData.description }}</div>
 			<div class="display-row">
-				<div>{{ subData.subscribers_count }} subscribers</div>
+				<div v-if="subData != undefined && subData.subscribers_count > 1">
+					{{ subData.subscribers_count }} subscribers
+				</div>
+				<div v-else>{{ subData.subscribers_count }} subscriber</div>
 				<div>
-					Created on {{ subData.timestamp.slice(5, 16) }} by
-					{{ subData.creator_name }}
+					Created on {{ subData.timestamp.slice(5, 16) }} by u/{{
+						subData.creator_name
+					}}
 				</div>
 			</div>
 		</div>
