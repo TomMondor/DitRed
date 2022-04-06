@@ -15,6 +15,7 @@ import { faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -29,6 +30,7 @@ library.add(faChalkboardUser);
 library.add(faUsers);
 library.add(faListUl);
 library.add(faPaperPlane);
+library.add(faMagnifyingGlass);
 
 /* add font awesome icon component */
 Vue.component("font-awesome-icon", FontAwesomeIcon);
@@ -36,6 +38,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 new Vue({
-    render: (h) => h(App),
-    router,
+	render: (h) => h(App),
+	router,
 }).$mount("#app");
