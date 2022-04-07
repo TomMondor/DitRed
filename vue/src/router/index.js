@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import LoggedUser from "@/pages/LoggedUser";
 import User from "@/pages/User";
 import Convos from "@/pages/Convos";
 import Convo from "@/pages/Convo";
@@ -20,9 +21,14 @@ const router = new Router({
 		},
 		{
 			path: "/user",
+			name: "LoggedUser",
+			component: LoggedUser,
+			meta: { requiresAuth: true },
+		},
+		{
+			path: "/user/:username",
 			name: "User",
 			component: User,
-			meta: { requiresAuth: true },
 		},
 		{
 			path: "/conversations",
