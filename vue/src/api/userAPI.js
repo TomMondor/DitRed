@@ -22,6 +22,17 @@ export const getUser = async function (userId) {
 	return jsonResponse; //TODO extract data if necessary
 };
 
+export const getUserByUsername = async function (username) {
+	const response = await fetch(`${BASE_URL}/usernames/${username}`);
+
+	if (response.status != 200) {
+		throw new Error("An error occured while fetching the user's data.");
+	}
+
+	const jsonResponse = await response.json();
+	return jsonResponse;
+};
+
 export const createUser = async function (username, password, email, bio, age) {
 	const response = await fetch(`${BASE_URL}/users`, {
 		method: "post",
@@ -60,4 +71,17 @@ export const createWallPost = async function (ownUserId, wallPostContent) {
 	if (response.status != 201) {
 		throw new Error("Could not create wall post.");
 	}
+};
+
+export const searchUsers = async function (username) {
+	const response = await fetch(
+		`${BASE_URL}/users/usernames?username=${username}`
+	);
+
+	if (response.status != 200) {
+		throw new Error("An error occured while fetching usernames.");
+	}
+
+	const jsonResponse = await response.json();
+	return jsonResponse;
 };

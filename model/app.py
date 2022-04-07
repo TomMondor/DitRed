@@ -123,6 +123,17 @@ def get_usernames():
     return response
 
 
+@app.route("/usernames/<string:username>", methods=["GET"])
+def get_user_by_username(username):
+    user = UsersRepository().get_user_by_username(username)
+    if user is None:
+        raise InvalidUserIdException()
+    wall_posts = users_repository.get_wallposts(user[0])
+    response = jsonify(user_assembler.assemble_user(user, wall_posts))
+
+    return response
+
+
 @app.route("/users/<int:user_id>", methods=["POST"])
 def post_wall_post(user_id):
     # TODO check user token
