@@ -35,6 +35,10 @@
                     icon="fa-solid fa-chalkboard-user"
             /></router-link>
         </div>
+        <div class="hp-login-container">
+            <div>Login</div>
+            <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
+        </div>
     </div>
 </template>
 
@@ -96,5 +100,25 @@ export default {
 
 .hp-ditred-logo {
     height: 2rem;
+}
+
+.hp-login-container {
+    flex: 1;
+
+    border: 4px solid hotpink;
+
+    font-family: "Varela Round", sans-serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--mainwhite);
+
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.hp-login-container:hover {
+    cursor: pointer;
+    color: var(--primary);
 }
 </style>
