@@ -19,7 +19,8 @@ from assemblers.validate_assembler import ValidateAssembler
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
-from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostIdException
+from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostCommentIdException, InvalidSubPostIdException
+from exceptions.invalid_exception.invalid_sub_post_exception import InvalidAnsweredCommentIdException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 app = Flask(__name__)
@@ -237,6 +238,92 @@ def post_sub_post(sub_id):
     sub_post_id = sub_posts_repository.create_post(sub_id, content["title"], content["content"], content["creator_id"])
 
     return {"sub_post_id": sub_post_id}, 201
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/vote", methods=["POST"])
+def post_sub_post_vote(sub_id, sub_post_id):
+    content = request.get_json()
+    sub_post_assembler.check_vote_request(content)
+
+    voter = users_repository.get_user(content["voter_id"])
+    sub_post = sub_posts_repository.get_post(sub_post_id)
+    if voter is None:
+        raise InvalidUserIdException()
+    if sub_post is None:
+        raise InvalidSubPostIdException()
+    sub_posts_repository.create_vote(sub_post_id, content["voter_id"], content["vote"])
+
+    return {}, 201
+
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments", methods=["POST"])
+def post_sub_post_comment(sub_id, sub_post_id):
+    content = request.get_json()
+    sub_post_assembler.check_comment_sub_post_request(content)
+
+    creator = users_repository.get_user(content["user_id"])
+    sub_post = sub_posts_repository.get_post(sub_post_id)
+    if creator is None:
+        raise InvalidUserIdException()
+    if sub_post is None:
+        raise InvalidSubPostIdException()
+    comment_id = comments_repository.create_comment(sub_post_id, content["user_id"], content["comment"])
+
+    return {"sub_post_comment_id": comment_id}, 201
+
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments/<int:comment_id>", methods=["POST"])
+def post_sub_post_comment_answer(sub_id, sub_post_id, comment_id):
+    content = request.get_json()
+    sub_post_assembler.check_comment_sub_post_request(content)
+
+    creator = users_repository.get_user(content["user_id"])
+    sub_post = sub_posts_repository.get_post(sub_post_id)
+    original_comment = comments_repository.get_comment(comment_id)
+    if creator is None:
+        raise InvalidUserIdException()
+    if sub_post is None:
+        raise InvalidSubPostIdException()
+    if original_comment is None:
+        raise InvalidAnsweredCommentIdException()
+    comment_id = comments_repository.create_comment_answer(sub_post_id, comment_id, content["user_id"], content["comment"])
+
+    return {"sub_post_comment_id": comment_id}, 201
+
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments/<int:comment_id>/vote", methods=["POST"])
+def post_sub_post_comment_vote(sub_id, sub_post_id, comment_id):
+    content = request.get_json()
+    sub_post_assembler.check_vote_request(content)
+
+    creator = users_repository.get_user(content["voter_id"])
+    sub_post = sub_posts_repository.get_post(sub_post_id)
+    comment = comments_repository.get_comment(comment_id)
+    if creator is None:
+        raise InvalidUserIdException()
+    if sub_post is None:
+        raise InvalidSubPostIdException()
+    if comment is None:
+        raise InvalidSubPostCommentIdException()
+    comments_repository.create_vote(comment_id, content["voter_id"], content["vote"])
+
+    return {}, 201
+
+
+#TODO Implement token validation
+@app.route("/subs/<int:sub_id>/subscribe", methods=["POST"])
+def post_sub_subscription(sub_id):
+    content = request.get_json()
+    sub_assembler.check_subscribe_request(content)
+    sub = subs_repository.get_sub(sub_id)
+    if sub is None:
+        raise InvalidSubIdException()
+    subs_repository.create_subscription(content["user_id"], sub_id)
+
+    return {}, 201
 
 
 # TODO Implement token validation so random people can't get anyone's messages

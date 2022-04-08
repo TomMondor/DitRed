@@ -34,6 +34,17 @@ class SubPostAssembler:
         self.__check_parameters_types(request)
         self.__check_request_parameters_length(request)
 
+    def check_vote_request(self, request):
+        self.__check_request_exists(request)
+        self.__check_vote_request_parameters_not_empty(request)
+        self.__check_vote_request_parameters_types(request)
+
+    def check_comment_sub_post_request(self, request):
+        self.__check_request_exists(request)
+        self.__check_comment_request_parameters_not_empty(request)
+        self.__check_comment_request_parameters_types(request)
+        self.__check_comment_request_parameters_length(request)
+
     def __check_request_exists(self, request):
         if request is None:
             raise MissingSubPostException()
@@ -44,11 +55,27 @@ class SubPostAssembler:
         if request["title"] is None or request["content"] is None or request["creator_id"] is None:
             raise MissingSubPostException()
 
+    def __check_vote_request_parameters_not_empty(self, request):
+        if "vote" not in request or "voter_id" not in request:
+            raise MissingSubPostVoteException()
+        if request["vote"] is None or request["voter_id"] is None:
+            raise MissingSubPostVoteException()
+
+    def __check_comment_request_parameters_not_empty(self, request):
+        if "user_id" not in request or "comment" not in request:
+            raise MissingSubPostCommentException()
+        if request["user_id"] is None or request["comment"] is None:
+            raise MissingSubPostCommentException()
+
     def __check_request_parameters_length(self, request):
         if len(request["title"]) > 255 or len(request["title"]) < 1:
             raise InvalidSubPostTitleException()
         if len(request["content"]) < 1:
             raise InvalidSubPostContentException()
+
+    def __check_comment_request_parameters_length(self, request):
+        if len(request["comment"]) > 2999 or len(request["comment"]) < 1:
+            raise InvalidSubPostCommentException()
 
     def __check_parameters_types(self, request):
         if not isinstance(request["title"], str):
@@ -57,3 +84,15 @@ class SubPostAssembler:
             raise InvalidSubPostContentException()
         if not isinstance(request["creator_id"], int):
             raise InvalidUserIdException()
+
+    def __check_vote_request_parameters_types(self, request):
+        if not isinstance(request["voter_id"], int):
+            raise InvalidUserIdException()
+        if not isinstance(request["vote"], str) :
+            raise InvalidSubPostVoteException()
+
+    def __check_comment_request_parameters_types(self, request):
+        if not isinstance(request["user_id"], int):
+            raise InvalidUserIdException()
+        if not isinstance(request["comment"], str) :
+            raise InvalidSubPostCommentException()

@@ -1,4 +1,4 @@
-from exceptions.missing_exception.missing_sub_exception import MissingSubException
+from exceptions.missing_exception.missing_sub_exception import *
 
 
 class SubAssembler:
@@ -29,6 +29,10 @@ class SubAssembler:
         self.__check_request_exists(request)
         self.__check_request_parameters_not_empty(request)
 
+    def check_subscribe_request(self, request):
+        self.__check_request_exists(request)
+        self.__check_subscribe_request_parameters_not_empty(request)
+
     def __check_request_exists(self, request):
         if not request:
             raise MissingSubException()
@@ -36,3 +40,7 @@ class SubAssembler:
     def __check_request_parameters_not_empty(self, request):
         if 'name' not in request or 'creator_id' not in request or 'description' not in request:
             raise MissingSubException()
+
+    def __check_subscribe_request_parameters_not_empty(self, request):
+        if "user_id" not in request:
+            raise MissingSubscribeException()
