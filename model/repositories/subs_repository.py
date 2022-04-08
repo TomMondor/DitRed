@@ -19,6 +19,10 @@ class SubsRepository(Repository):
         sub_id = self.__add_sub_to_database(name, creator_id, description)
         return sub_id
 
+    def create_subscription(self, user_id, sub_id):
+        self.cursor.execute(f"INSERT INTO Subscribers (user_id, sub_id)" +
+                            f" VALUES ({user_id}, {sub_id})")
+
     def __add_sub_to_database(self, name, creator_id, description):
         self.cursor.execute(f"INSERT INTO Subs (name, creator_id, timestamp, description, subscribers_count) " +
                             f"VALUES ('{name}', {creator_id}, NOW(), '{description}', 0)")

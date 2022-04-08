@@ -67,3 +67,11 @@ class UsersRepository(Repository):
             raise InvalidPasswordException()
 
         return user[0]
+
+    def get_matching_usernames(self, username_substring):
+        self.cursor.execute(f"""SELECT username FROM Users WHERE username LIKE '%{username_substring}%'""")
+        return self.cursor.fetchall()
+
+    def get_user_by_username(self, username):
+        self.cursor.execute(f"""SELECT * FROM Users WHERE username = '{username}'""")
+        return self.cursor.fetchone()

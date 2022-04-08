@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UserSelector :key="username" @userSelected="redirectToUserPage" />
+		<UserSelector @userSelected="redirectToUserPage" />
 		<div class="user-card-container">
 			<user-card
 				:name="userData.username"
@@ -27,46 +27,35 @@
 </template>
 
 <script>
-import { getUserByUsername } from "../api/userAPI.js";
+import { getUser } from "../api/userAPI.js";
 import WallPostCard from "../components/WallPostCard.vue";
 import UserCard from "../components/UserCard.vue";
 import UserSelector from "../components/common/UserSelector.vue";
+import Cookies from "js-cookie";
 
 export default {
-	name: "User",
+	name: "LoggedUser",
 	components: {
 		WallPostCard,
 		UserCard,
 		UserSelector,
 	},
 	mounted() {
-		this.getUsername();
 		this.getUserData();
 	},
 	data: () => {
 		return {
 			userData: {},
-			userId: "",
-			username: "",
+			userId: Cookies.get("userId"),
 		};
 	},
 	methods: {
-		getUsername() {
-			this.username = this.$router.currentRoute.params.username;
-		},
 		async getUserData() {
-			const data = await getUserByUsername(this.username);
-			this.userId = Object.keys(data)[0];
+			const data = await getUser(this.userId);
 			this.userData = data[this.userId];
 		},
 		redirectToUserPage(user) {
 			this.$router.push("/user/" + user);
-		},
-	},
-	watch: {
-		"$route.path": function (newRoute, oldRoute) {
-			this.getUsername();
-			this.getUserData();
 		},
 	},
 };

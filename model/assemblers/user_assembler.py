@@ -36,6 +36,12 @@ class UserAssembler:
         if not isinstance(wall_post_content, str):
             raise InvalidWallPostException()
 
+    def assemble_usernames(self, users_list):
+        usernames = []
+        for user in users_list:
+            usernames.append(user[0])
+        return usernames
+
     def check_create_user_request(self, request):
         self.__check_request_fields_present(request)
         self.__check_user_email(request['email'])
