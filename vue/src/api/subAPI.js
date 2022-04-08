@@ -96,6 +96,7 @@ export const subscribe = async function (userId, subId) {
             user_id: userId,
         }),
         headers: new Headers({
+            "Content-Type": "application/json",
             //TODO needs the token
         }),
     });
