@@ -25,18 +25,12 @@
                     icon="fa-solid fa-comment-dots"
             /></router-link>
         </div>
-        <div v-if="!connected" class="hp-login-container">
-            <router-link to="/login" class="hp-login">
+        <div class="hp-login-container">
+            <router-link v-if="!connected" to="/login" class="hp-login">
                 <div>Login</div>
                 <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
             </router-link>
-            <!-- <div v-else class="hp-login">
-                <div>Sign out</div>
-                <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
-            </div> -->
-        </div>
-        <div v-else class="hp-login-container">
-            <div class="hp-login" @click="signout">
+            <div v-else class="hp-login" @click="signout">
                 <div>Sign out</div>
                 <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
             </div>
