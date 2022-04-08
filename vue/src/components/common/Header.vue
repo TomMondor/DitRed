@@ -25,16 +25,56 @@
                     icon="fa-solid fa-comment-dots"
             /></router-link>
         </div>
-        <div class="hp-login-container">
-            <div>Login</div>
-            <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
+        <div v-if="!connected" class="hp-login-container">
+            <router-link to="/login" class="hp-login">
+                <div>Login</div>
+                <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
+            </router-link>
+            <!-- <div v-else class="hp-login">
+                <div>Sign out</div>
+                <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
+            </div> -->
+        </div>
+        <div v-else class="hp-login-container">
+            <div class="hp-login" @click="signout">
+                <div>Sign out</div>
+                <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import { validateCookies } from "@/api/loginAPI";
+
 export default {
     name: "Header",
+    data() {
+        return {
+            connected: false,
+            key: 0,
+        };
+    },
+    async mounted() {
+        if (await validateCookies()) {
+            this.connected = true;
+        } else {
+            this.connected = false;
+        }
+
+        this.$root.$on("logged-in", () => {
+            this.connected = true;
+        });
+    },
+    methods: {
+        signout() {
+            Cookies.remove("userId");
+            Cookies.remove("token");
+            this.connected = false;
+            window.location = "/";
+        },
+    },
 };
 </script>
 
@@ -94,8 +134,13 @@ export default {
 
 .hp-login-container {
     flex: 1;
+    display: flex;
+    justify-content: right;
+}
 
-    border: 4px solid hotpink;
+.hp-login {
+    text-decoration: none;
+    width: fit-content;
 
     font-family: "Varela Round", sans-serif;
     font-size: 1.3rem;
@@ -105,9 +150,11 @@ export default {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+
+    margin-right: 1rem;
 }
 
-.hp-login-container:hover {
+.hp-login:hover {
     cursor: pointer;
     color: var(--primary);
 }
