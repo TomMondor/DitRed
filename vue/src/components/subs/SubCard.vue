@@ -31,6 +31,7 @@
 <script>
 import { subscribe } from "../../api/subAPI";
 import Cookies from "js-cookie";
+import Vue from "vue";
 
 export default {
     name: "SubCard",
@@ -46,8 +47,24 @@ export default {
     mounted() {},
     methods: {
         async subscribe() {
-            await subscribe(this.userId, this.subId);
-            //TODO vérifier si fonctionne quand le call d'api sera fait dans le b-e
+            try {
+                await subscribe(this.userId, this.subId);
+                this.$toast.open({
+                    message: "You are now subscribed to this sub!",
+                    type: "success",
+                    position: "top-right",
+                    duration: 5000,
+                    dismissible: true,
+                });
+            } catch (error) {
+                this.$toast.open({
+                    message: "You are already subscribed to this sub.",
+                    type: "error",
+                    position: "top-right",
+                    duration: 5000,
+                    dismissible: true,
+                });
+            }
         },
         redirectToSubPage() {
             this.$router.push("/sub/" + this.subId);

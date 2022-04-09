@@ -1,6 +1,8 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+import VueToast from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 /* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -32,12 +34,14 @@ library.add(faListUl);
 library.add(faPaperPlane);
 library.add(faMagnifyingGlass);
 
+Vue.use(VueToast);
+
 /* add font awesome icon component */
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;
 
 new Vue({
-	render: (h) => h(App),
-	router,
+    render: (h) => h(App),
+    router,
 }).$mount("#app");
