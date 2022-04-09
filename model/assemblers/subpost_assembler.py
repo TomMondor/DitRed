@@ -75,7 +75,7 @@ class SubPostAssembler:
 
     def __check_comment_request_parameters_length(self, request):
         if len(request["comment"]) > 2999 or len(request["comment"]) < 1:
-            raise InvalidSubPostCommentException()
+            raise InvalidSubPostCommentIdException()
 
     def __check_parameters_types(self, request):
         if not isinstance(request["title"], str):

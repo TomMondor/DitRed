@@ -133,7 +133,7 @@ export const createSubPost = async function (
 
 export const voteOnSubPost = async function (userId, subId, postId, vote) {
     const response = await fetch(
-        `${BASE_URL}/subs/${subId}/posts${postId}/vote`,
+        `${BASE_URL}/subs/${subId}/posts/${postId}/vote`,
         {
             method: "post",
             body: JSON.stringify({

@@ -55,14 +55,56 @@ export default {
             }
         },
         async upvote() {
-            //TODO call api await voteOnSubPost()
-            //if success
-            //this.score++;
+            try {
+                await voteOnSubPost(
+                    parseInt(this.userId),
+                    this.subId,
+                    this.postId,
+                    "upvote"
+                );
+                this.score++;
+                this.$toast.open({
+                    message: "Upvoted!",
+                    type: "success",
+                    position: "top-right",
+                    duration: 5000,
+                    dismissible: true,
+                });
+            } catch (error) {
+                this.$toast.open({
+                    message: "You have already voted on this post.",
+                    type: "error",
+                    position: "top-right",
+                    duration: 5000,
+                    dismissible: true,
+                });
+            }
         },
         async downvote() {
-            //TODO call api await voteOnSubPost()
-            //if success
-            //this.score--;
+            try {
+                await voteOnSubPost(
+                    parseInt(this.userId),
+                    this.subId,
+                    this.postId,
+                    "downvote"
+                );
+                this.score--;
+                this.$toast.open({
+                    message: "Downvoted!",
+                    type: "success",
+                    position: "top-right",
+                    duration: 5000,
+                    dismissible: true,
+                });
+            } catch (error) {
+                this.$toast.open({
+                    message: "You have already voted on this post.",
+                    type: "error",
+                    position: "top-right",
+                    duration: 5000,
+                    dismissible: true,
+                });
+            }
         },
     },
 };
