@@ -4,7 +4,7 @@
         :class="[isALink ? 'cursor-pointer' : '']"
         @click="redirectToSubPostPage"
     >
-        <Score :score="score" @upvote="upvote" @downvote="downvote" />
+        <Score :score="score" />
         <div class="post-container">
             <div class="post-overhead">
                 <div class="sub-name">r/{{ subName }}</div>
@@ -48,6 +48,10 @@ export default {
         "isALink",
         "userId",
     ],
+    mounted() {
+        this.$on("upvote", this.upvote);
+        this.$on("downvote", this.downvote);
+    },
     methods: {
         redirectToSubPostPage() {
             if (this.isALink) {

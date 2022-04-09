@@ -24,10 +24,10 @@ export default {
     props: ["score", "isSmall"],
     methods: {
         upvote() {
-            this.$emit("upvote");
+            this.$parent.$emit("upvote");
         },
         downvote() {
-            this.$emit("downvote");
+            this.$parent.$emit("downvote");
         },
     },
 };
@@ -76,6 +76,10 @@ export default {
 }
 
 .arrow:hover {
+    cursor: pointer;
+}
+
+.arrow-small:hover {
     cursor: pointer;
 }
 
