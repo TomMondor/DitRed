@@ -17,6 +17,8 @@ import { faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 /* import font awesome icon component */
@@ -32,6 +34,8 @@ library.add(faChalkboardUser);
 library.add(faUsers);
 library.add(faListUl);
 library.add(faPaperPlane);
+library.add(faRightFromBracket);
+library.add(faRightToBracket);
 library.add(faMagnifyingGlass);
 
 Vue.use(VueToast);
