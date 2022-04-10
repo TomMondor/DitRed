@@ -17,6 +17,7 @@
 				Wallposts
 			</h1>
 			<h1 v-else class="wallposts-header">No wallposts yet</h1>
+			<CreateWallPost :userId="userId" @refresh="getUserData" />
 			<WallPostCard
 				v-for="wallPost in userData.wallPosts"
 				:key="wallPost[0]"
@@ -30,6 +31,7 @@
 import { getUser } from "../api/userAPI.js";
 import WallPostCard from "../components/user/WallPostCard.vue";
 import UserCard from "../components/user/UserCard.vue";
+import CreateWallPost from "../components/user/CreateWallPost.vue";
 import UserSelector from "../components/common/UserSelector.vue";
 import Cookies from "js-cookie";
 
@@ -38,6 +40,7 @@ export default {
 	components: {
 		WallPostCard,
 		UserCard,
+		CreateWallPost,
 		UserSelector,
 	},
 	mounted() {
