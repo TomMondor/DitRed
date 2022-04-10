@@ -14,6 +14,11 @@
                     class="hp-header-icon"
                     icon="fa-solid fa-list-ul"
             /></router-link>
+            <router-link to="/subbed"
+                ><font-awesome-icon
+                    class="hp-header-icon"
+                    icon="fa-solid fa-list-ul"
+            /></router-link>
             <router-link to="/user"
                 ><font-awesome-icon
                     class="hp-header-icon"
