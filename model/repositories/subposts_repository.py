@@ -25,3 +25,10 @@ class SubPostsRepository(Repository):
             f"INSERT INTO SubPostsVotes (sub_post_id, user_id, vote)" +
             f" VALUES ({sub_post_id}, {voter_id}, '{vote}')"
         )
+
+    def get_subbed_posts(self, user_id):
+        self.cursor.execute(f"SELECT * "
+                            f"FROM SubPosts SP, Subscribers S "
+                            f"WHERE S.user_id = '{user_id}' AND S.sub_id = SP.sub_id")
+
+        return self.cursor.fetchall()

@@ -8,7 +8,6 @@ from repositories.subposts_repository import SubPostsRepository
 from repositories.comments_repository import CommentsRepository
 from repositories.login_tokens_repository import LoginTokensRepository
 from repositories.chat_ids_repository import ChatIdsRepository
-from repositories.wallposts_repository import WallPostsRepository
 
 from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
@@ -36,6 +35,7 @@ sub_assembler = SubAssembler()
 
 sub_posts_repository = SubPostsRepository()
 sub_post_assembler = SubPostAssembler()
+subbed_posts_assembler = SubbedPostsAssembler()
 
 comments_repository = CommentsRepository()
 comments_assembler = CommentAssembler()
@@ -47,9 +47,6 @@ login_tokens_repository = LoginTokensRepository()
 validate_assembler = ValidateAssembler()
 
 chat_ids_repository = ChatIdsRepository()
-
-wall_posts_repository = WallPostsRepository()
-subbed_posts_assembler = SubbedPostsAssembler()
 
 
 @app.after_request
@@ -369,7 +366,7 @@ def post_message(user_id):
 @app.route("/subbed", methods=["GET"])
 def get_subbed_posts():
     current_id = request.headers.get("userId")
-    subbed_posts = wall_posts_repository.get_subbed_posts(current_id)
+    subbed_posts = sub_posts_repository.get_subbed_posts(current_id)
 
     authors = {}
     sub_names = {}
