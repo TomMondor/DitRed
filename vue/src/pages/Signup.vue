@@ -81,7 +81,7 @@ export default {
                 SameSite: "Strict",
             });
 
-            window.location.href = "/#/";
+            window.location.href = "/#/login";
         },
     },
 };
