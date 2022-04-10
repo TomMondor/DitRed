@@ -1,8 +1,8 @@
 <template>
 	<div class="subs-container">
 		<h1 class="subs-header">Subs</h1>
-		<!-- TODO ajouter l'option de créer un Sub -->
-		<div v-for="(sub, index) in subsData" :key="index">
+		<CreateSub v-if="connected" :userId="userId" @refresh="getSubsData" />
+		<div v-for="(sub, index) in subsData" :key="index + refresh">
 			<SubCard :subData="sub" :subId="Number(index)" />
 		</div>
 	</div>
@@ -11,17 +11,29 @@
 <script>
 import { getSubs } from "../api/subAPI.js";
 import SubCard from "../components/subs/SubCard.vue";
+import CreateSub from "../components/subs/CreateSub.vue";
+import Cookies from "js-cookie";
+import { validateCookies } from "../api/loginAPI.js";
 
 export default {
 	name: "Subs",
-	components: { SubCard },
+	components: { SubCard, CreateSub },
 	data: () => {
 		return {
 			subsData: {},
+			userId: Cookies.get("userId"),
+			refresh: false,
+			connected: false,
 		};
 	},
-	mounted() {
+	async mounted() {
 		this.getSubsData();
+
+		if (await validateCookies()) {
+			this.connected = true;
+		} else {
+			this.connected = false;
+		}
 	},
 	methods: {
 		async getSubsData() {
