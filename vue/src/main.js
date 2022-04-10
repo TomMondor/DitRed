@@ -21,7 +21,6 @@ import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faMessage } from "@fortawesome/free-solid-svg-icons";
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -40,7 +39,6 @@ library.add(faRightFromBracket);
 library.add(faRightToBracket);
 library.add(faMagnifyingGlass);
 library.add(faHeart);
-library.add(faMessage);
 
 Vue.use(VueToast);
 
