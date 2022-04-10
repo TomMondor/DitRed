@@ -40,6 +40,17 @@ export default {
 			this.isFormOpen = !this.isFormOpen;
 		},
 		async createPost() {
+			this.wallPostContent = this.wallPostContent.trim();
+			if (this.wallPostContent.length == 0) {
+				this.$toast.open({
+					message: "Wall post must not be empty",
+					type: "error",
+					position: "top-right",
+					duration: 2000,
+					dismissible: true,
+				});
+				return;
+			}
 			await createWallPost(this.userId, this.wallPostContent);
 			this.toggleFormVisibility();
 			this.wallPostContent = "";
