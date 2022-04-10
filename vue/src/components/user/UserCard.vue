@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<img
-			src="../../public/DitRed-logo.png"
+			src="../../../public/DitRed-logo.png"
 			class="ditred-logo"
 			alt="ditred-logo"
 		/>

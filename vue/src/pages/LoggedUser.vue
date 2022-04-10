@@ -2,7 +2,7 @@
 	<div>
 		<UserSelector @userSelected="redirectToUserPage" />
 		<div class="user-card-container">
-			<user-card
+			<UserCard
 				:name="userData.username"
 				:timestamp="userData.memberSince"
 				:bio="userData.bio"
@@ -17,7 +17,7 @@
 				Wallposts
 			</h1>
 			<h1 v-else class="wallposts-header">No wallposts yet</h1>
-			<wall-post-card
+			<WallPostCard
 				v-for="wallPost in userData.wallPosts"
 				:key="wallPost[0]"
 				:content="wallPost[0]"
@@ -28,8 +28,8 @@
 
 <script>
 import { getUser } from "../api/userAPI.js";
-import WallPostCard from "../components/WallPostCard.vue";
-import UserCard from "../components/UserCard.vue";
+import WallPostCard from "../components/user/WallPostCard.vue";
+import UserCard from "../components/user/UserCard.vue";
 import UserSelector from "../components/common/UserSelector.vue";
 import Cookies from "js-cookie";
 
