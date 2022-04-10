@@ -43,6 +43,12 @@ export default {
 	color: var(--mainwhite);
 }
 
+@media screen and (max-width: 1100px) {
+	.container {
+		width: 50vw;
+	}
+}
+
 .ditred-logo {
 	width: 10vw;
 	height: 10vw;

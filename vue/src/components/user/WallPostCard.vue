@@ -1,27 +1,33 @@
 <template>
-    <div class="container">
-        {{ content }}
-    </div>
+	<div class="container">
+		{{ content }}
+	</div>
 </template>
 
 <script>
 export default {
-    name: "WallPostCard",
-    props: ["content"],
+	name: "WallPostCard",
+	props: ["content"],
 };
 </script>
 
 <style scoped>
 .container {
-    display: flex;
-    width: 50vw;
-    height: fit-content;
-    padding: 2rem;
+	display: flex;
+	width: 50vw;
+	height: fit-content;
+	padding: 2rem;
 
-    background-color: var(--background);
+	background-color: var(--background);
 
-    border-radius: 1rem;
+	border-radius: 1rem;
 
-    color: var(--mainwhite);
+	color: var(--mainwhite);
+}
+
+@media screen and (max-width: 1100px) {
+	.container {
+		width: 80vw;
+	}
 }
 </style>
