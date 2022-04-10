@@ -1,14 +1,17 @@
 <template>
-	<div class="convos-container">
-		<UserSelector @userSelected="startNewConvo" />
-		<h1 class="convos-header">Conversations with:</h1>
-		<ConvoWithUserCard
-			v-for="(otherUserUsername, userId) in convosData"
-			:key="otherUserUsername + refresh"
-			:username="otherUserUsername"
-			:userId="userId"
-		/>
-	</div>
+    <div class="main-container">
+        <UserSelector @userSelected="startNewConvo" />
+        <h1 class="convos-header">Conversations with:</h1>
+        <div v-if="Object.keys(convosData).length" class="convos-container">
+            <ConvoWithUserCard
+                v-for="(otherUserUsername, userId) in convosData"
+                :key="otherUserUsername + refresh"
+                :username="otherUserUsername"
+                :userId="userId"
+            />
+        </div>
+        <div class="no-convo" v-else>You have no conversation.</div>
+    </div>
 </template>
 
 <script>
@@ -19,43 +22,59 @@ import UserSelector from "../components/common/UserSelector.vue";
 import Cookies from "js-cookie";
 
 export default {
-	name: "Convos",
-	components: { ConvoWithUserCard, UserSelector },
-	mounted() {
-		this.getConvosData();
-	},
-	data: () => {
-		return {
-			convosData: {},
-			refresh: false,
-			userId: Cookies.get("userId"),
-		};
-	},
-	methods: {
-		async getConvosData() {
-			this.convosData = await getConvos(this.userId);
-		},
-		async startNewConvo(otherUserUsername) {
-			const data = await getUserByUsername(otherUserUsername);
-			const userId = Object.keys(data)[0];
-			this.convosData[userId] = otherUserUsername;
-			this.refresh = !this.refresh;
-		},
-	},
+    name: "Convos",
+    components: { ConvoWithUserCard, UserSelector },
+    mounted() {
+        this.getConvosData();
+    },
+    data: () => {
+        return {
+            convosData: {},
+            refresh: false,
+            userId: Cookies.get("userId"),
+        };
+    },
+    methods: {
+        async getConvosData() {
+            this.convosData = await getConvos(this.userId);
+        },
+        async startNewConvo(otherUserUsername) {
+            const data = await getUserByUsername(otherUserUsername);
+            const userId = Object.keys(data)[0];
+            this.convosData[userId] = otherUserUsername;
+            this.refresh = !this.refresh;
+        },
+    },
 };
 </script>
 
-<style>
+<style scoped>
 .convos-header {
-	color: var(--mainwhite);
+    color: var(--mainwhite);
+}
+
+.main-container {
+    margin-top: 5rem;
+    margin-bottom: 7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
 }
 
 .convos-container {
-	margin-top: 5rem;
-	margin-bottom: 7rem;
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-	align-items: center;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.no-convo {
+    color: var(--primary);
+    font-size: 4rem;
+    font-weight: bold;
+    text-align: center;
 }
 </style>
