@@ -20,6 +20,8 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-solid-svg-icons";
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -37,6 +39,8 @@ library.add(faPaperPlane);
 library.add(faRightFromBracket);
 library.add(faRightToBracket);
 library.add(faMagnifyingGlass);
+library.add(faHeart);
+library.add(faMessage);
 
 Vue.use(VueToast);
 
@@ -46,6 +50,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 new Vue({
-    render: (h) => h(App),
-    router,
+	render: (h) => h(App),
+	router,
 }).$mount("#app");
