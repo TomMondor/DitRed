@@ -2,7 +2,7 @@
     <div class="main-container">
         <UserSelector @userSelected="startNewConvo" />
         <h1 class="convos-header">Conversations with:</h1>
-        <div v-if="Object.keys(convosData).length" class="convos-container">
+        <div v-if="this.areThereConvos" :key="refresh" class="convos-container">
             <ConvoWithUserCard
                 v-for="(otherUserUsername, userId) in convosData"
                 :key="otherUserUsername + refresh"
@@ -10,7 +10,7 @@
                 :userId="userId"
             />
         </div>
-        <div class="no-convo" v-else>You have no conversation.</div>
+        <div v-else class="no-convo">You have no conversation.</div>
     </div>
 </template>
 
@@ -32,13 +32,16 @@ export default {
             convosData: {},
             refresh: false,
             userId: Cookies.get("userId"),
+            areThereConvos: false,
         };
     },
     methods: {
         async getConvosData() {
             this.convosData = await getConvos(this.userId);
+            this.areThereConvos = Object.keys(this.convosData).length > 0;
         },
         async startNewConvo(otherUserUsername) {
+            this.areThereConvos = true;
             const data = await getUserByUsername(otherUserUsername);
             const userId = Object.keys(data)[0];
             this.convosData[userId] = otherUserUsername;
