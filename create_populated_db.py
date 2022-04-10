@@ -145,7 +145,7 @@ def generate_subs(cursor, subs_number):
 
     sub_names = set()
     while len(sub_names) < subs_number:
-        sub_names.add(get_sentence(count=1, word_range=(1, 10))[:100].strip('. '))
+        sub_names.add(get_word(count=1, sep='').title())
     sub_names = list(sub_names)
 
     for i in range(subs_number):
