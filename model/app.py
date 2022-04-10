@@ -8,6 +8,7 @@ from repositories.subposts_repository import SubPostsRepository
 from repositories.comments_repository import CommentsRepository
 from repositories.login_tokens_repository import LoginTokensRepository
 from repositories.chat_ids_repository import ChatIdsRepository
+from repositories.wallposts_repository import WallPostsRepository
 
 from assemblers.message_assembler import MessageAssembler
 from assemblers.user_assembler import UserAssembler
@@ -15,6 +16,7 @@ from assemblers.sub_assembler import SubAssembler
 from assemblers.subpost_assembler import SubPostAssembler
 from assemblers.comment_assembler import CommentAssembler
 from assemblers.validate_assembler import ValidateAssembler
+from assemblers.subbedposts_assembler import SubbedPostsAssembler
 
 from exceptions.invalid_exception.invalid_parameter_exception import InvalidParameterException
 from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdException
@@ -45,6 +47,9 @@ login_tokens_repository = LoginTokensRepository()
 validate_assembler = ValidateAssembler()
 
 chat_ids_repository = ChatIdsRepository()
+
+wall_posts_repository = WallPostsRepository()
+subbed_posts_assembler = SubbedPostsAssembler()
 
 
 @app.after_request
@@ -359,6 +364,22 @@ def post_message(user_id):
     response = jsonify(messages_assembler.assemble_message(message))
 
     return response, 201
+
+
+@app.route("/subbed", methods=["GET"])
+def get_subbed_posts():
+    current_id = request.headers.get("userId")
+    subbed_posts = wall_posts_repository.get_subbed_posts(current_id)
+
+    authors = {}
+    sub_names = {}
+    for post in subbed_posts:
+        user_id = post[2]
+        authors[user_id] = UsersRepository().get_username(user_id)
+        sub_names[user_id] = SubsRepository().get_sub_name(post[1])
+    response = jsonify(subbed_posts_assembler.assemble_subbed_posts(subbed_posts, authors, sub_names))
+
+    return response
 
 
 @app.route("/validate", methods=["GET"])

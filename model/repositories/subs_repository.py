@@ -14,6 +14,10 @@ class SubsRepository(Repository):
         self.cursor.execute(f"SELECT * FROM Subs WHERE id = {id}")
         return self.cursor.fetchone()
 
+    def get_sub_name(self, id):
+        self.cursor.execute(f"SELECT name FROM Subs WHERE id = {id}")
+        return self.cursor.fetchone()[0]
+
     def create_sub(self, name, creator_id, description):
         self.__check_new_sub_validity(name, creator_id)
         sub_id = self.__add_sub_to_database(name, creator_id, description)
