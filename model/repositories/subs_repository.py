@@ -11,11 +11,11 @@ class SubsRepository(Repository):
         return self.cursor.fetchall()
 
     def get_sub(self, id):
-        self.cursor.execute(f"SELECT * FROM Subs WHERE id = {id}")
+        self.cursor.execute(f"SELECT * FROM Subs WHERE id = %s", (id,))
         return self.cursor.fetchone()
 
     def get_sub_name(self, id):
-        self.cursor.execute(f"SELECT name FROM Subs WHERE id = {id}")
+        self.cursor.execute(f"SELECT name FROM Subs WHERE id = %s", (id,))
         return self.cursor.fetchone()[0]
 
     def create_sub(self, name, creator_id, description):
@@ -25,11 +25,11 @@ class SubsRepository(Repository):
 
     def create_subscription(self, user_id, sub_id):
         self.cursor.execute(f"INSERT INTO Subscribers (user_id, sub_id)" +
-                            f" VALUES ({user_id}, {sub_id})")
+                            f" VALUES (%s, %s)", (user_id, sub_id))
 
     def __add_sub_to_database(self, name, creator_id, description):
         self.cursor.execute(f"INSERT INTO Subs (name, creator_id, timestamp, description, subscribers_count) " +
-                            f"VALUES ('{name}', {creator_id}, NOW(), '{description}', 0)")
+                            f"VALUES (%s, %s, NOW(), %s, 0)", (name, creator_id, description))
         return self.cursor.lastrowid
 
     def __check_new_sub_validity(self, new_name, creator_id):
@@ -41,7 +41,7 @@ class SubsRepository(Repository):
             raise InvalidSubCreatorIdException()
 
     def __check_creator_id_exists(self, creator_id):
-        self.cursor.execute(f"SELECT * FROM Users WHERE id = {creator_id}")
+        self.cursor.execute(f"SELECT * FROM Users WHERE id = %s", (creator_id,))
         return self.cursor.fetchone() is not None
 
     def __raise_error_if_new_sub_name_exists(self, new_name):
@@ -49,11 +49,11 @@ class SubsRepository(Repository):
             raise InvalidSubNameException()
 
     def __check_sub_name_exists(self, name):
-        self.cursor.execute(f"SELECT * FROM Subs WHERE name = '{name}'")
+        self.cursor.execute(f"SELECT * FROM Subs WHERE name = %s", (name,))
         return self.cursor.fetchone() is not None
 
     def __check_if_new_sub_name_different_than_old(self, sub_id, new_name):
-        self.cursor.execute(f"SELECT name FROM Subs WHERE id = {sub_id}")
+        self.cursor.execute(f"SELECT name FROM Subs WHERE id = %s", (sub_id,))
         old_name = self.cursor.fetchone()[0]
         return old_name != new_name
 
@@ -64,7 +64,7 @@ class SubsRepository(Repository):
         return self.__get_updated_sub_data(sub_id)
 
     def __check_if_sub_not_owned_by_creator(self, sub_id, creator_id):
-        self.cursor.execute(f"SELECT * FROM Subs WHERE id = {sub_id} AND creator_id = {creator_id}")
+        self.cursor.execute(f"SELECT * FROM Subs WHERE id = %s AND creator_id = %s", (sub_id, creator_id))
         if self.cursor.fetchone() is None:
             raise InvalidSubCreatorIdException() #TODO: verify if this is the correct exception
 
@@ -78,13 +78,13 @@ class SubsRepository(Repository):
             raise InvalidSubIdException()
 
     def __check_sub_id_exists(self, sub_id):
-        self.cursor.execute(f"SELECT * FROM Subs WHERE id = {sub_id}")
+        self.cursor.execute(f"SELECT * FROM Subs WHERE id = %s", (sub_id,))
         return self.cursor.fetchone() is not None
 
     def __update_sub_content(self, sub_id, name, description):
-        self.cursor.execute(f"UPDATE Subs SET name = '{name}', description = '{description}' WHERE id = {sub_id}")
+        self.cursor.execute(f"UPDATE Subs SET name = %s, description = %s WHERE id = %s", (name, description, sub_id))
 
     def __get_updated_sub_data(self, id):
-        self.cursor.execute(f"SELECT * FROM Subs WHERE id = {id}")
+        self.cursor.execute(f"SELECT * FROM Subs WHERE id = %s", (id,))
         return self.cursor.fetchone()
     

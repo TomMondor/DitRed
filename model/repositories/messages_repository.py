@@ -8,17 +8,19 @@ class MessagesRepository(Repository):
 
     def get_convos(self, id):
         self.cursor.execute(
-            f"SELECT DISTINCT sender_id, (SELECT username FROM Users WHERE id = sender_id) FROM Messages WHERE receiver_id = {id}\
+            f"SELECT DISTINCT sender_id, (SELECT username FROM Users WHERE id = sender_id) FROM Messages WHERE receiver_id = %s\
                 UNION\
-                SELECT DISTINCT receiver_id, (SELECT username FROM Users WHERE id = receiver_id) FROM Messages WHERE sender_id = {id}"
+                SELECT DISTINCT receiver_id, (SELECT username FROM Users WHERE id = receiver_id) FROM Messages WHERE sender_id = %s",
+            (id, id)
         )
         return self.cursor.fetchall()
 
     def get_convo(self, first_user_id, second_user_id):
         self.cursor.execute(
-            f"SELECT * FROM Messages WHERE sender_id = {first_user_id} AND receiver_id = {second_user_id}\
+            f"SELECT * FROM Messages WHERE sender_id = %s AND receiver_id = %s\
                 UNION\
-                SELECT * FROM Messages WHERE sender_id = {second_user_id} AND receiver_id = {first_user_id}"
+                SELECT * FROM Messages WHERE sender_id = %s AND receiver_id = %s",
+            (first_user_id, second_user_id, second_user_id, first_user_id)
         )
         return self.cursor.fetchall()
 
@@ -26,7 +28,8 @@ class MessagesRepository(Repository):
         timestamp = datetime.today()
         self.cursor.execute(
             f"INSERT INTO Messages (sender_id, receiver_id, timestamp, message)\
-                VALUES ({sender_id}, {receiver_id}, '{timestamp})', '{content}');"
+                VALUES (%s, %s, %s, %s);",
+            (sender_id, receiver_id, timestamp, content)
         )
         self.cursor.execute(
             f"SELECT LAST_INSERT_ID();"
