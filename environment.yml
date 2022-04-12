@@ -16,3 +16,4 @@ dependencies:
           - Flask
           - flask-restful
           - flask-socketio
+          - eventlet
