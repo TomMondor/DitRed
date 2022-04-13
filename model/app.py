@@ -49,10 +49,23 @@ validate_assembler = ValidateAssembler()
 chat_ids_repository = ChatIdsRepository()
 
 
+@app.before_request
+def check_token():
+    if validate_assembler.is_requiring_authentication(request):
+        user_id = request.cookies.get("userId")
+        login_token = request.cookies.get("loginToken")
+        if user_id is None or login_token is None:
+            return jsonify({"message": "Must be logged in"}), 401
+        logged_in = login_tokens_repository.validate_login_token(int(user_id), login_token)
+        if not logged_in:
+            return jsonify({"message": "Must be logged in."}), 401
+
+
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
     response.headers["Access-Control-Allow-Headers"] = "userId,loginToken,content-type"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
 
     return response
 

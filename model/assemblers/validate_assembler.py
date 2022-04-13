@@ -10,3 +10,11 @@ class ValidateAssembler:
         if user_id == "undefined" or login_token == "undefined":
             return True
         return False
+
+    def is_requiring_authentication(self, request):
+        is_validation_free = request.path.startswith("/login") or request.path == "/users" or request.method == "OPTIONS"
+        modifies_data = request.method in ['POST', 'PUT', 'DELETE', 'PATCH']
+        is_convo = request.path.startswith("/convo")
+        is_subbed = request.path.startswith("/subbed")
+
+        return not is_validation_free and (modifies_data or is_convo or is_subbed)
