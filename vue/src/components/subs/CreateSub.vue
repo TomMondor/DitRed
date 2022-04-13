@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { createSub } from "../../api/subAPI";
+import { createSub, subscribe } from "../../api/subAPI";
 
 export default {
 	name: "CreateSub",
@@ -41,6 +41,7 @@ export default {
 			isFormOpen: false,
 			subName: "r/",
 			subDescription: "",
+			createdSubId: null,
 		};
 	},
 	mounted() {},
@@ -73,11 +74,29 @@ export default {
 			}
 
 			//si tout est conforme :
-			await createSub(this.userId, this.subName, this.subDescription);
+			const response = await createSub(
+				this.userId,
+				this.subName,
+				this.subDescription
+			);
+			this.createdSubId = response["sub_id"];
 			this.toggleFormVisibility();
 			this.subName = "r/";
 			this.subDescription = "";
+			this.subscribe();
 			this.$emit("refresh");
+		},
+		async subscribe() {
+			try {
+				await subscribe(this.userId, this.createdSubId);
+				this.$toast.open({
+					message: "You are now subscribed to the created sub!",
+					type: "success",
+					position: "top-right",
+					duration: 5000,
+					dismissible: true,
+				});
+			} catch (error) {}
 		},
 	},
 };
