@@ -1,17 +1,17 @@
 <template>
-    <div class="main-container">
-        <UserSelector @userSelected="startNewConvo" />
-        <h1 class="convos-header">Conversations with:</h1>
-        <div v-if="this.areThereConvos" :key="refresh" class="convos-container">
-            <ConvoWithUserCard
-                v-for="(otherUserUsername, userId) in convosData"
-                :key="otherUserUsername + refresh"
-                :username="otherUserUsername"
-                :userId="userId"
-            />
-        </div>
-        <div v-else class="no-convo">You have no conversation.</div>
-    </div>
+	<div class="main-container">
+		<UserSelector @userSelected="startNewConvo" />
+		<h1 class="convos-header">Conversations with:</h1>
+		<div v-if="this.areThereConvos" :key="refresh" class="convos-container">
+			<ConvoWithUserCard
+				v-for="(otherUserUsername, userId) in convosData"
+				:key="otherUserUsername + refresh"
+				:username="otherUserUsername"
+				:userId="userId"
+			/>
+		</div>
+		<div v-else class="no-convo">You have no conversation.</div>
+	</div>
 </template>
 
 <script>
@@ -22,62 +22,60 @@ import UserSelector from "../components/common/UserSelector.vue";
 import Cookies from "js-cookie";
 
 export default {
-    name: "Convos",
-    components: { ConvoWithUserCard, UserSelector },
-    mounted() {
-        this.getConvosData();
-    },
-    data: () => {
-        return {
-            convosData: {},
-            refresh: false,
-            userId: Cookies.get("userId"),
-            areThereConvos: false,
-        };
-    },
-    methods: {
-        async getConvosData() {
-            this.convosData = await getConvos(this.userId);
-            this.areThereConvos = Object.keys(this.convosData).length > 0;
-        },
-        async startNewConvo(otherUserUsername) {
-            this.areThereConvos = true;
-            const data = await getUserByUsername(otherUserUsername);
-            const userId = Object.keys(data)[0];
-            this.convosData[userId] = otherUserUsername;
-            this.refresh = !this.refresh;
-        },
-    },
+	name: "Convos",
+	components: { ConvoWithUserCard, UserSelector },
+	mounted() {
+		this.getConvosData();
+	},
+	data: () => {
+		return {
+			convosData: {},
+			refresh: false,
+			userId: Cookies.get("userId"),
+			areThereConvos: false,
+		};
+	},
+	methods: {
+		async getConvosData() {
+			this.convosData = await getConvos(this.userId);
+			this.areThereConvos = Object.keys(this.convosData).length > 0;
+		},
+		async startNewConvo(otherUserUsername) {
+			const data = await getUserByUsername(otherUserUsername);
+			const userId = Object.keys(data)[0];
+			this.$router.push(`/conversations/${userId}`);
+		},
+	},
 };
 </script>
 
 <style scoped>
 .convos-header {
-    color: var(--mainwhite);
+	color: var(--mainwhite);
 }
 
 .main-container {
-    margin-top: 5rem;
-    margin-bottom: 7rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
+	margin-top: 5rem;
+	margin-bottom: 7rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	align-items: center;
 }
 
 .convos-container {
-    height: fit-content;
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
+	height: fit-content;
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	align-items: center;
 }
 
 .no-convo {
-    color: var(--primary);
-    font-size: 4rem;
-    font-weight: bold;
-    text-align: center;
+	color: var(--primary);
+	font-size: 4rem;
+	font-weight: bold;
+	text-align: center;
 }
 </style>
