@@ -55,7 +55,7 @@ export default {
 	display: flex;
 	width: 100%;
 	height: fit-content;
-	padding-top: 2rem;
+	padding-top: 5rem;
 	color: white;
 	font-family: "Varela Round", sans-serif;
 	font-size: 2rem;
@@ -68,7 +68,7 @@ export default {
 	align-items: center;
 	width: 100%;
 	height: fit-content;
-	padding-top: 4rem;
+	padding-top: 2rem;
 	padding-bottom: 4rem;
 	gap: 4rem;
 }
