@@ -9,7 +9,7 @@
 					>
 						<Score :isSmall="true" :score="score" />
 						<div class="comment-button" @click="toggleFormVisibility">
-							<font-awesome-icon icon="fa-solid fa-message" />Comment
+							<font-awesome-icon icon="fa-solid fa-message" />Reply
 						</div>
 						u/{{ commentData.creator_name }} |
 						{{ commentData.timestamp.slice(4, 16) }}
