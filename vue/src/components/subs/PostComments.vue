@@ -2,6 +2,7 @@
 	<div class="comments-outer-container">
 		<div class="comments-inner-container">
 			<CreateCommentAtRoot
+				v-if="connected"
 				@refresh="refresh"
 				:userId="userId"
 				:postId="postId"
@@ -25,6 +26,8 @@
 <script>
 import PostComment from "./PostComment.vue";
 import CreateCommentAtRoot from "./CreateCommentAtRoot.vue";
+import { validateCookies } from "../../api/loginAPI.js";
+
 export default {
 	name: "PostComments",
 	props: {
@@ -40,10 +43,17 @@ export default {
 	data: () => {
 		return {
 			commentsTree: {},
+			connected: false,
 		};
 	},
-	mounted() {
+	async mounted() {
 		this.buildCommentsTree();
+
+		if (await validateCookies()) {
+			this.connected = true;
+		} else {
+			this.connected = false;
+		}
 	},
 	methods: {
 		buildCommentsTree() {

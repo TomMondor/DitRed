@@ -8,7 +8,11 @@
 						v-if="commentData.timestamp != undefined"
 					>
 						<Score :isSmall="true" :score="score" />
-						<div class="comment-button" @click="toggleFormVisibility">
+						<div
+							class="comment-button"
+							v-if="connected"
+							@click="toggleFormVisibility"
+						>
 							<font-awesome-icon icon="fa-solid fa-message" />Reply
 						</div>
 						u/{{ commentData.creator_name }} |
@@ -49,6 +53,7 @@ import PostComment from "./PostComment.vue";
 import CreateComment from "./CreateComment.vue";
 import Score from "../Score.vue";
 import { voteOnSubPostComment } from "../../api/subAPI.js";
+import { validateCookies } from "../../api/loginAPI.js";
 
 export default {
 	name: "PostComment",
@@ -70,13 +75,20 @@ export default {
 			commentData: {},
 			score: 0,
 			isFormOpen: false,
+			connected: false,
 		};
 	},
-	mounted() {
+	async mounted() {
 		this.$on("upvote", this.upvote);
 		this.$on("downvote", this.downvote);
 		this.commentData = this.commentsData[this.commentId];
 		this.score = this.commentData.score;
+
+		if (await validateCookies()) {
+			this.connected = true;
+		} else {
+			this.connected = false;
+		}
 	},
 	methods: {
 		async upvote() {
