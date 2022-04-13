@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="overall-container">
 		<div :key="convoBubblesKey" class="convo-container">
 			<h1 class="convo-header">Convo:</h1>
 			<convo-bubble
@@ -144,6 +144,13 @@ export default {
 .right-bubble {
 	align-self: flex-end;
 	background-color: var(--background);
+}
+
+.overall-container {
+	min-height: calc(100vh - 5rem);
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 .write-message {
