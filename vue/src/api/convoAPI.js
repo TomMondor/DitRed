@@ -3,6 +3,7 @@ const BASE_URL = "http://localhost:5000";
 export const getConvos = async function (userId) {
 	const response = await fetch(`${BASE_URL}/convo`, {
 		method: "get",
+		credentials: "include",
 		headers: new Headers({
 			userId: userId, //TODO needs the token (remove userId input when done)
 		}),
@@ -19,6 +20,7 @@ export const getConvos = async function (userId) {
 export const getConvo = async function (myUserId, userId) {
 	const response = await fetch(`${BASE_URL}/convo/${userId}`, {
 		method: "get",
+		credentials: "include",
 		headers: new Headers({
 			userId: myUserId, //TODO needs the token (remove myUserId input when done)
 		}),
@@ -35,6 +37,7 @@ export const getConvo = async function (myUserId, userId) {
 export const createMessage = async function (myUserId, userId, message) {
 	const response = await fetch(`${BASE_URL}/convo/${userId}`, {
 		method: "post",
+		credentials: "include",
 		body: JSON.stringify({
 			message: message,
 		}),

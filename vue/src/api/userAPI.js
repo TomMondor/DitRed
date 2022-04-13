@@ -60,6 +60,7 @@ export const createUser = async function (username, password, email, bio, age) {
 export const createWallPost = async function (ownUserId, wallPostContent) {
 	const response = await fetch(`${BASE_URL}/users/${ownUserId}`, {
 		method: "post",
+		credentials: "include",
 		body: JSON.stringify({
 			wallPostContent: wallPostContent,
 		}),
