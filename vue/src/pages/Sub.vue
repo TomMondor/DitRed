@@ -4,8 +4,14 @@
 			<h1 class="text-orange">r/{{ subData.name }}</h1>
 			<div>{{ subData.description }}</div>
 			<div class="display-row">
-				<div class="text-orange">
+				<div
+					v-if="subData != null && subData.subscribers_count > 1"
+					class="text-orange"
+				>
 					{{ subData.subscribers_count }} subscribers
+				</div>
+				<div v-else class="text-orange">
+					{{ subData.subscribers_count }} subscriber
 				</div>
 				<div v-if="subData.timestamp != undefined">
 					Created on {{ subData.timestamp.slice(4, 16) }} by u/{{
