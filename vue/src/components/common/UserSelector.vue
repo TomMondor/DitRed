@@ -3,13 +3,13 @@
 		<div v-if="isSelectorOpen" class="selection-container">
 			<div>
 				<input
-					id="user-input"
+					v-focus
 					autocomplete="off"
+					spellcheck="false"
 					class="username-textarea"
 					v-model="potentialUsername"
 					placeholder="Select a user..."
-					@keydown.enter="validateUsername"
-					@keydown.backspace="removeSuggestions"
+					@focusout="toggleSelectorVisibility"
 				/>
 			</div>
 			<div class="suggestions-section">
@@ -17,14 +17,24 @@
 					class="name-suggestion"
 					v-for="username of correspondingUsernames"
 					:key="username"
-					@click="selectUsername(username)"
+					@mousedown="selectUsername(username)"
 				>
 					{{ username }}
 				</div>
 			</div>
 		</div>
 		<div v-if="isSelectorOpen" class="arrow-right"></div>
-		<div class="selection-icon-container" @click="toggleSelectorVisibility">
+		<div
+			v-if="!isSelectorOpen"
+			class="selection-icon-container"
+			@click="toggleSelectorVisibility"
+		>
+			<font-awesome-icon
+				icon="fa-solid fa-magnifying-glass"
+				class="selection-icon"
+			/>
+		</div>
+		<div :key="isSelectorOpen" v-else class="selection-icon-container">
 			<font-awesome-icon
 				icon="fa-solid fa-magnifying-glass"
 				class="selection-icon"
@@ -45,6 +55,7 @@ export default {
 			isSelectorOpen: false,
 			potentialUsername: "",
 			correspondingUsernames: [],
+			awaitingSearch: false,
 		};
 	},
 	mounted() {},
@@ -55,11 +66,26 @@ export default {
 		async validateUsername() {
 			this.correspondingUsernames = await searchUsers(this.potentialUsername);
 		},
-		removeSuggestions() {
-			this.correspondingUsernames = [];
-		},
 		toggleSelectorVisibility() {
 			this.isSelectorOpen = !this.isSelectorOpen;
+		},
+	},
+	directives: {
+		focus: {
+			inserted: function (el) {
+				el.focus();
+			},
+		},
+	},
+	watch: {
+		potentialUsername: function (newValue) {
+			if (!this.awaitingSearch) {
+				setTimeout(() => {
+					this.validateUsername();
+					this.awaitingSearch = false;
+				}, 500);
+			}
+			this.awaitingSearch = true;
 		},
 	},
 };
@@ -70,7 +96,8 @@ export default {
 	position: absolute;
 	top: 83px;
 	right: 90px;
-	width: 20%;
+	width: 300px;
+	max-width: 70vw;
 	border-radius: 1rem;
 	border: 5px solid rgb(73, 73, 73);
 	background-color: rgb(73, 73, 73);
@@ -120,6 +147,19 @@ export default {
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
+}
+
+.suggestions-section::-webkit-scrollbar {
+	width: 7px;
+	height: 8px;
+}
+.suggestions-section::-webkit-scrollbar-thumb {
+	background-color: var(--background);
+	border-radius: 10px;
+}
+
+.suggestions-section::-webkit-scrollbar-thumb:hover {
+	background-color: black;
 }
 
 .name-suggestion {
