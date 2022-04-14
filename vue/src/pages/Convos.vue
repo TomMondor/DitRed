@@ -41,9 +41,7 @@ export default {
 			this.areThereConvos = Object.keys(this.convosData).length > 0;
 		},
 		async startNewConvo(otherUserUsername) {
-			const data = await getUserByUsername(otherUserUsername);
-			const userId = Object.keys(data)[0];
-			this.$router.push(`/conversations/${userId}`);
+			this.$router.push("conversations/" + otherUserUsername);
 		},
 	},
 };

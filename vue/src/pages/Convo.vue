@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import { getConvo } from "../api/convoAPI.js";
-import { createMessage } from "../api/convoAPI.js";
+import { getConvo, createMessage } from "../api/convoAPI.js";
+import { getUserByUsername } from "../api/userAPI.js";
 import ConvoBubble from "../components/ConvoBubble.vue";
 import Cookies from "js-cookie";
 
@@ -45,10 +45,7 @@ export default {
 	name: "Convos",
 	components: { ConvoBubble },
 	mounted() {
-		this.getUserId();
-		this.getConvoData();
-		this.setUpPrivateMessageSocket();
-		this.setUpReceiveMessages();
+		this.setup();
 	},
 	data: () => {
 		return {
@@ -59,11 +56,20 @@ export default {
 		};
 	},
 	methods: {
+		async setup() {
+			await this.getUserId();
+			this.getConvoData();
+			this.setUpPrivateMessageSocket();
+			this.setUpReceiveMessages();
+		},
 		async getConvoData() {
 			this.convoData = await getConvo(this.myUserId, this.userId);
 		},
 		async getUserId() {
-			this.userId = this.$router.currentRoute.params.userId;
+			const username = this.$router.currentRoute.params.username;
+			const data = await getUserByUsername(username);
+			this.userId = Object.keys(data)[0];
+			return this.userId; //returns to force await
 		},
 		sendMessage() {
 			if (this.message) {
@@ -106,6 +112,11 @@ export default {
 		},
 		forceUpdate() {
 			this.convoBubblesKey++;
+		},
+	},
+	watch: {
+		"$route.path": function (newRoute, oldRoute) {
+			this.setup();
 		},
 	},
 };

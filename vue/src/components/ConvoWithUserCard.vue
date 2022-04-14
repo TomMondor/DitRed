@@ -1,6 +1,6 @@
 <template>
 	<router-link
-		:to="{ name: 'Convo', params: { userId: this.userId } }"
+		:to="{ name: 'Convo', params: { username: this.username } }"
 		class="router-link"
 	>
 		<div class="convo-container">
@@ -18,11 +18,7 @@
 export default {
 	name: "ConvoWithUserCard",
 	props: ["userId", "username"],
-	methods: {
-		async redirectToConvo() {
-			this.$router.push("/conversations/" + this.userId);
-		},
-	},
+	methods: {},
 };
 </script>
 
