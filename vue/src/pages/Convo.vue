@@ -141,7 +141,7 @@ export default {
 	height: fit-content;
 	margin: 0 auto;
 	margin-top: 5rem;
-	margin-bottom: 7rem;
+	margin-bottom: 2rem;
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
