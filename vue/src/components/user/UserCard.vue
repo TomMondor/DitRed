@@ -7,7 +7,6 @@
 		/>
 		<div class="name">{{ name }}</div>
 		<div class="info">
-			<div>Score: <span class="score">XXXX</span></div>
 			<div v-if="timestamp != undefined">
 				Member since:
 				<span class="timestamp">{{ timestamp.slice(5, 16) }}</span>
