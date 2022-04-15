@@ -6,7 +6,9 @@ class CommentsRepository(Repository):
         super().__init__()
 
     def get_comments(self, sub_post_id):
-        self.cursor.execute(f"SELECT * FROM SubPostComments WHERE sub_post_id = %s", (sub_post_id,))
+        self.cursor.execute(
+            f"SELECT C.*, U.username FROM SubPostComments C, Users U WHERE sub_post_id = %s AND C.user_id = U.id",
+            (sub_post_id,))
         return self.cursor.fetchall()
 
     def get_comment(self, comment_id):

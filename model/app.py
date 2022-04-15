@@ -192,12 +192,7 @@ def get_sub_post(sub_id, sub_post_id):
     if post is None:
         raise InvalidSubPostIdException()
     comments = comments_repository.get_comments(sub_post_id)
-    authors = {}
-    for comment in comments:
-        comment_id = comment[0]
-        user_id = comment[2]
-        authors[comment_id] = users_repository.get_username(user_id)
-    assembled_comments = comments_assembler.assemble_comments(comments, authors)
+    assembled_comments = comments_assembler.assemble_comments(comments)
     response = jsonify(sub_post_assembler.assemble_post(post, assembled_comments))
 
     return response
