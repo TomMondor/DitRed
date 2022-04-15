@@ -47,17 +47,27 @@ export default {
 					dismissible: true,
 				});
 				return;
+			} else if (this.commentContent.length > 3000) {
+				this.$toast.open({
+					message: "Comment is too long",
+					type: "error",
+					position: "top-right",
+					duration: 2000,
+					dismissible: true,
+				});
+				return;
+			} else {
+				await createSubPostCommentAnswer(
+					Number(this.userId),
+					Number(this.subId),
+					Number(this.postId),
+					this.commentContent,
+					Number(this.parentCommentId)
+				);
+				this.$emit("refresh");
+				this.commentContent = "";
+				this.toggleFormVisibility();
 			}
-			await createSubPostCommentAnswer(
-				Number(this.userId),
-				Number(this.subId),
-				Number(this.postId),
-				this.commentContent,
-				Number(this.parentCommentId)
-			);
-			this.$emit("refresh");
-			this.commentContent = "";
-			this.toggleFormVisibility();
 		},
 		toggleFormVisibility() {
 			this.$emit("toggleFormVisibility");
