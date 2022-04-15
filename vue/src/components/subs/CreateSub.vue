@@ -59,6 +59,7 @@ export default {
 					duration: 2000,
 					dismissible: true,
 				});
+				this.subName = "r/";
 				return;
 			}
 			this.subDescription = this.subDescription.trim();
@@ -74,17 +75,29 @@ export default {
 			}
 
 			//si tout est conforme :
+
 			const response = await createSub(
 				this.userId,
 				this.subName,
 				this.subDescription
 			);
-			this.createdSubId = response["sub_id"];
-			this.toggleFormVisibility();
-			this.subName = "r/";
-			this.subDescription = "";
-			this.subscribe();
-			this.$emit("refresh");
+			if (response["message"]) {
+				this.$toast.open({
+					message: response["message"],
+					type: "error",
+					position: "top-right",
+					duration: 2000,
+					dismissible: true,
+				});
+				return;
+			} else {
+				this.createdSubId = response["sub_id"];
+				this.toggleFormVisibility();
+				this.subName = "r/";
+				this.subDescription = "";
+				this.subscribe();
+				this.$emit("refresh");
+			}
 		},
 		async subscribe() {
 			try {

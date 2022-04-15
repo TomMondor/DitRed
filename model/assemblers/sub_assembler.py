@@ -1,4 +1,5 @@
 from exceptions.missing_exception.missing_sub_exception import *
+from exceptions.invalid_exception.invalid_sub_exception import *
 
 
 class SubAssembler:
@@ -28,6 +29,7 @@ class SubAssembler:
     def check_create_sub_request(self, request):
         self.__check_request_exists(request)
         self.__check_request_parameters_not_empty(request)
+        self.__check_request_parameters_length(request)
 
     def check_subscribe_request(self, request):
         self.__check_request_exists(request)
@@ -44,3 +46,9 @@ class SubAssembler:
     def __check_subscribe_request_parameters_not_empty(self, request):
         if "user_id" not in request:
             raise MissingSubscribeException()
+
+    def __check_request_parameters_length(self, request):
+        if len(request['name']) > 100:
+            raise InvalidSubNameException()
+        if len(request['description']) > 1000:
+            raise InvalidSubDescriptionException()

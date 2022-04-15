@@ -58,9 +58,6 @@ export const createSub = async function (userId, subName, subDescription) {
 		}),
 	});
 
-	if (response.status != 201) {
-		throw new Error("Could not create sub.");
-	}
 	const jsonResponse = await response.json();
 	return jsonResponse;
 };
