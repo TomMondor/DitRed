@@ -352,14 +352,7 @@ def post_message(user_id):
 def get_subbed_posts():
     current_id = request.headers.get("userId")
     subbed_posts = sub_posts_repository.get_subbed_posts(current_id)
-
-    authors = {}
-    sub_names = {}
-    for post in subbed_posts:
-        user_id = post[2]
-        authors[user_id] = UsersRepository().get_username(user_id)
-        sub_names[user_id] = SubsRepository().get_sub_name(post[1])
-    response = jsonify(subbed_posts_assembler.assemble_subbed_posts(subbed_posts, authors, sub_names))
+    response = jsonify(subbed_posts_assembler.assemble_subbed_posts(subbed_posts))
 
     return response
 
