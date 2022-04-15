@@ -19,8 +19,8 @@
 			<h1 v-else class="wallposts-header">No wallposts yet</h1>
 			<CreateWallPost :userId="userId" @refresh="getUserData" />
 			<WallPostCard
-				v-for="wallPost in userData.wallPosts"
-				:key="wallPost[0]"
+				v-for="(wallPost, index) in wallPosts"
+				:key="wallPost[0] + index"
 				:content="wallPost[0]"
 			/>
 		</div>
@@ -49,6 +49,7 @@ export default {
 	data: () => {
 		return {
 			userData: {},
+			wallPosts: [],
 			userId: Cookies.get("userId"),
 		};
 	},
@@ -56,6 +57,8 @@ export default {
 		async getUserData() {
 			const data = await getUser(this.userId);
 			this.userData = data[this.userId];
+			this.wallPosts = [...this.userData.wallPosts];
+			this.wallPosts.reverse();
 		},
 		redirectToUserPage(user) {
 			this.$router.push("/user/" + user);

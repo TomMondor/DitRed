@@ -18,8 +18,8 @@
 			</h1>
 			<h1 v-else class="wallposts-header">No wallposts yet</h1>
 			<WallPostCard
-				v-for="wallPost in userData.wallPosts"
-				:key="wallPost[0]"
+				v-for="(wallPost, index) in wallPosts"
+				:key="wallPost[0] + index"
 				:content="wallPost[0]"
 			/>
 		</div>
@@ -48,6 +48,7 @@ export default {
 			userData: {},
 			userId: "",
 			username: "",
+			wallPosts: [],
 		};
 	},
 	methods: {
@@ -58,6 +59,8 @@ export default {
 			const data = await getUserByUsername(this.username);
 			this.userId = Object.keys(data)[0];
 			this.userData = data[this.userId];
+			this.wallPosts = [...this.userData.wallPosts];
+			this.wallPosts.reverse();
 		},
 		redirectToUserPage(user) {
 			this.$router.push("/user/" + user);
