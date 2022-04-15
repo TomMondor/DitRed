@@ -66,17 +66,40 @@ export default {
 				return;
 			}
 
-			const userId = await createUser(username, password, email, bio, age);
-			const loginResponse = await login(username, password);
-			const loginToken = loginResponse["token"];
+			try {
+				const response = await createUser(username, password, email, bio, age);
+				if (response["message"]) {
+					this.$toast.open({
+						message: response["message"],
+						type: "error",
+						position: "top-right",
+						duration: 2000,
+						dismissible: true,
+					});
+					return;
+				} else {
+					const userId = response["userId"];
+					const loginResponse = await login(username, password);
+					const loginToken = loginResponse["token"];
 
-			Cookies.set("userId", userId, {
-				SameSite: "Strict",
-			});
+					Cookies.set("userId", userId, {
+						SameSite: "Strict",
+					});
 
-			Cookies.set("loginToken", loginToken, {
-				SameSite: "Strict",
-			});
+					Cookies.set("loginToken", loginToken, {
+						SameSite: "Strict",
+					});
+				}
+			} catch (e) {
+				this.$toast.open({
+					message: "Could not create user account",
+					type: "error",
+					position: "top-right",
+					duration: 2000,
+					dismissible: true,
+				});
+				return;
+			}
 
 			window.location.href = "/#/";
 

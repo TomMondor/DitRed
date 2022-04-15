@@ -49,12 +49,8 @@ export const createUser = async function (username, password, email, bio, age) {
 		}),
 	});
 
-	if (response.status != 201) {
-		throw new Error("Could not create user.");
-	}
-
 	const jsonResponse = await response.json();
-	return jsonResponse["userId"];
+	return jsonResponse;
 };
 
 export const createWallPost = async function (ownUserId, wallPostContent) {
