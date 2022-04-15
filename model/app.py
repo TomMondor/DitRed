@@ -152,7 +152,6 @@ def get_user_by_username(username):
 
 @app.route("/users/<int:user_id>", methods=["POST"])
 def post_wall_post(user_id):
-    # TODO check user token
     content = request.get_json()
     user_assembler.check_create_wallpost_request(content)
     wall_post_content = content["wallPostContent"]
@@ -225,7 +224,7 @@ def post_sub():
 
 
 @app.route("/subs/<int:sub_id>", methods=["PUT"])
-def put_sub(sub_id):
+def update_sub(sub_id):
     content = request.get_json()
     sub_assembler.check_create_sub_request(content)
     updated_sub_content = subs_repository.update_sub(
@@ -238,7 +237,6 @@ def put_sub(sub_id):
     return jsonify(sub_assembler.assemble_sub(updated_sub_content))
 
 
-# TODO Implement token validation
 @app.route("/subs/<int:sub_id>/posts", methods=["POST"])
 def post_sub_post(sub_id):
     content = request.get_json()
@@ -254,7 +252,7 @@ def post_sub_post(sub_id):
 
     return {"sub_post_id": sub_post_id}, 201
 
-#TODO Implement token validation
+
 @app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/vote", methods=["POST"])
 def post_sub_post_vote(sub_id, sub_post_id):
     content = request.get_json()
@@ -274,7 +272,6 @@ def post_sub_post_vote(sub_id, sub_post_id):
     return {}, 201
 
 
-#TODO Implement token validation
 @app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments", methods=["POST"])
 def post_sub_post_comment(sub_id, sub_post_id):
     content = request.get_json()
@@ -291,7 +288,6 @@ def post_sub_post_comment(sub_id, sub_post_id):
     return {"sub_post_comment_id": comment_id}, 201
 
 
-#TODO Implement token validation
 @app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments/<int:comment_id>", methods=["POST"])
 def post_sub_post_comment_answer(sub_id, sub_post_id, comment_id):
     content = request.get_json()
@@ -311,7 +307,6 @@ def post_sub_post_comment_answer(sub_id, sub_post_id, comment_id):
     return {"sub_post_comment_id": comment_id}, 201
 
 
-#TODO Implement token validation
 @app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/comments/<int:comment_id>/vote", methods=["POST"])
 def post_sub_post_comment_vote(sub_id, sub_post_id, comment_id):
     content = request.get_json()
@@ -331,7 +326,6 @@ def post_sub_post_comment_vote(sub_id, sub_post_id, comment_id):
     return {}, 201
 
 
-#TODO Implement token validation
 @app.route("/subs/<int:sub_id>/subscribe", methods=["POST"])
 def post_sub_subscription(sub_id):
     content = request.get_json()
@@ -344,7 +338,6 @@ def post_sub_subscription(sub_id):
     return {}, 201
 
 
-# TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo", methods=["GET"])
 def get_convo():
     id = request.headers.get("userId")
@@ -354,7 +347,6 @@ def get_convo():
     return response
 
 
-# TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo/<int:user_id>", methods=["GET"])
 def get_specific_convo(user_id):
     current_id = request.headers.get("userId")
@@ -364,7 +356,6 @@ def get_specific_convo(user_id):
     return response
 
 
-# TODO Implement token validation so random people can't get anyone's messages
 @app.route("/convo/<int:user_id>", methods=["POST"])
 def post_message(user_id):
     current_id = request.headers.get("userId")

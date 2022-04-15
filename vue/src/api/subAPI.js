@@ -8,7 +8,7 @@ export const getSubs = async function () {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const getSub = async function (subId) {
@@ -19,7 +19,7 @@ export const getSub = async function (subId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const getSubPosts = async function (subId) {
@@ -30,7 +30,7 @@ export const getSubPosts = async function (subId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const getSubPost = async function (subId, postId) {
@@ -41,7 +41,7 @@ export const getSubPost = async function (subId, postId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const createSub = async function (userId, subName, subDescription) {
@@ -54,7 +54,7 @@ export const createSub = async function (userId, subName, subDescription) {
 			creator_id: userId,
 		}),
 		headers: new Headers({
-			"Content-Type": "application/json", //TODO needs the token
+			"Content-Type": "application/json",
 		}),
 	});
 
@@ -72,7 +72,7 @@ export const updateSub = async function (
 	subDescription
 ) {
 	const response = await fetch(`${BASE_URL}/subs/${subId}`, {
-		method: "post", // TODO PUT ?
+		method: "put",
 		credentials: "include",
 		body: JSON.stringify({
 			name: subName,
@@ -80,7 +80,7 @@ export const updateSub = async function (
 			creator_id: userId,
 		}),
 		headers: new Headers({
-			"Content-Type": "application/json", //TODO needs the token
+			"Content-Type": "application/json",
 		}),
 	});
 
@@ -100,7 +100,6 @@ export const subscribe = async function (userId, subId) {
 		}),
 		headers: new Headers({
 			"Content-Type": "application/json",
-			//TODO needs the token
 		}),
 	});
 
@@ -124,7 +123,7 @@ export const createSubPost = async function (
 			creator_id: userId,
 		}),
 		headers: new Headers({
-			"Content-Type": "application/json", //TODO needs the token
+			"Content-Type": "application/json",
 		}),
 	});
 
@@ -146,7 +145,7 @@ export const voteOnSubPost = async function (userId, subId, postId, vote) {
 				vote: vote,
 			}),
 			headers: new Headers({
-				"Content-Type": "application/json", //TODO needs the token
+				"Content-Type": "application/json",
 			}),
 		}
 	);
@@ -172,7 +171,7 @@ export const createSubPostComment = async function (
 				comment: comment,
 			}),
 			headers: new Headers({
-				"Content-Type": "application/json", //TODO needs the token
+				"Content-Type": "application/json",
 			}),
 		}
 	);
@@ -199,7 +198,7 @@ export const createSubPostCommentAnswer = async function (
 				comment: comment,
 			}),
 			headers: new Headers({
-				"Content-Type": "application/json", //TODO needs the token
+				"Content-Type": "application/json",
 			}),
 		}
 	);
@@ -226,7 +225,7 @@ export const voteOnSubPostComment = async function (
 				vote: vote,
 			}),
 			headers: new Headers({
-				"Content-Type": "application/json", //TODO needs the token
+				"Content-Type": "application/json",
 			}),
 		}
 	);

@@ -14,5 +14,5 @@ export const getSubbedPosts = async function (userId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };

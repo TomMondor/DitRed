@@ -5,7 +5,7 @@ export const getConvos = async function (userId) {
 		method: "get",
 		credentials: "include",
 		headers: new Headers({
-			userId: userId, //TODO needs the token (remove userId input when done)
+			userId: userId,
 		}),
 	});
 
@@ -14,7 +14,7 @@ export const getConvos = async function (userId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const getConvo = async function (myUserId, userId) {
@@ -22,7 +22,7 @@ export const getConvo = async function (myUserId, userId) {
 		method: "get",
 		credentials: "include",
 		headers: new Headers({
-			userId: myUserId, //TODO needs the token (remove myUserId input when done)
+			userId: myUserId,
 		}),
 	});
 
@@ -31,7 +31,7 @@ export const getConvo = async function (myUserId, userId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const createMessage = async function (myUserId, userId, message) {
@@ -43,7 +43,7 @@ export const createMessage = async function (myUserId, userId, message) {
 		}),
 		headers: new Headers({
 			"Content-Type": "application/json",
-			userId: myUserId, //TODO needs the token (remove myUserId input when done)
+			userId: myUserId,
 		}),
 	});
 

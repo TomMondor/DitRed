@@ -8,7 +8,7 @@ export const getAllUsers = async function () {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const getUser = async function (userId) {
@@ -19,7 +19,7 @@ export const getUser = async function (userId) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse; //TODO extract data if necessary
+	return jsonResponse;
 };
 
 export const getUserByUsername = async function (username) {
@@ -54,7 +54,7 @@ export const createUser = async function (username, password, email, bio, age) {
 	}
 
 	const jsonResponse = await response.json();
-	return jsonResponse["userId"]; //TODO extract data if necessary
+	return jsonResponse["userId"];
 };
 
 export const createWallPost = async function (ownUserId, wallPostContent) {
@@ -65,7 +65,7 @@ export const createWallPost = async function (ownUserId, wallPostContent) {
 			wallPostContent: wallPostContent,
 		}),
 		headers: new Headers({
-			"Content-Type": "application/json", //TODO needs the token
+			"Content-Type": "application/json",
 		}),
 	});
 

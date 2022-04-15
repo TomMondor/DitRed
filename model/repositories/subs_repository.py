@@ -66,7 +66,7 @@ class SubsRepository(Repository):
     def __check_if_sub_not_owned_by_creator(self, sub_id, creator_id):
         self.cursor.execute(f"SELECT * FROM Subs WHERE id = %s AND creator_id = %s", (sub_id, creator_id))
         if self.cursor.fetchone() is None:
-            raise InvalidSubCreatorIdException() #TODO: verify if this is the correct exception
+            raise InvalidSubCreatorIdException()
 
     def __check_updated_sub_validity(self, sub_id, name):
         self.__raise_error_if_sub_id_does_not_exist(sub_id)
