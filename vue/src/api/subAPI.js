@@ -124,9 +124,6 @@ export const createSubPost = async function (
 		}),
 	});
 
-	if (response.status != 201) {
-		throw new Error("Could not create sub post.");
-	}
 	const jsonResponse = await response.json();
 	return jsonResponse;
 };

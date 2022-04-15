@@ -250,7 +250,7 @@ def post_sub_post(sub_id):
         raise InvalidSubIdException()
     sub_post_id = sub_posts_repository.create_post(sub_id, content["title"], content["content"], content["creator_id"])
 
-    return {"sub_post_id": sub_post_id}, 201
+    return jsonify({"sub_post_id": sub_post_id}), 201
 
 
 @app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/vote", methods=["POST"])

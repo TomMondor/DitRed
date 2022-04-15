@@ -72,16 +72,29 @@ export default {
 			}
 
 			//si tout est conforme :
-			await createSubPost(
+			const response = await createSubPost(
 				Number(this.userId),
 				Number(this.subId),
 				this.subPostTitle,
 				this.subPostContent
 			);
-			this.toggleFormVisibility();
-			this.subPostTitle = "";
-			this.subPostContent = "";
-			this.$emit("refresh");
+
+			if (response["message"]) {
+				this.$toast.open({
+					message: response["message"],
+					type: "error",
+					position: "top-right",
+					duration: 2000,
+					dismissible: true,
+				});
+
+				return;
+			} else {
+				this.toggleFormVisibility();
+				this.subPostTitle = "";
+				this.subPostContent = "";
+				this.$emit("refresh");
+			}
 		},
 	},
 };
