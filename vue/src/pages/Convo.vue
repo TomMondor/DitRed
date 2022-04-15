@@ -2,14 +2,12 @@
 	<div class="overall-container">
 		<div :key="convoBubblesKey" class="convo-container">
 			<h1 class="convo-header">Convo:</h1>
-			<convo-bubble
+			<ConvoBubble
 				v-for="(messageData, messageId) in convoData"
 				:key="messageId"
 				:message="messageData['content']"
 				:timestamp="messageData['timestamp']"
-				:class="[
-					messageData['sender_id'] == userId ? 'left-bubble' : 'right-bubble',
-				]"
+				:isFromLoggedUser="messageData['sender_id'] == userId"
 			/>
 		</div>
 		<div id="message-form" class="write-message">
@@ -104,7 +102,7 @@ export default {
 				content: message,
 				receiver_id: receiverId,
 				sender_id: senderId,
-				timestamp: new Date().toLocaleString(),
+				timestamp: new Date().toString(),
 			};
 			this.convoData[messageId] = messageData;
 			this.forceUpdate();
@@ -145,16 +143,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
-}
-
-.left-bubble {
-	align-self: flex-start;
-	background-color: var(--backgroundlighter);
-}
-
-.right-bubble {
-	align-self: flex-end;
-	background-color: var(--background);
 }
 
 .overall-container {
