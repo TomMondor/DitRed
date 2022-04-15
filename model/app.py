@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, emit
+from pymysql import IntegrityError
 
 from repositories.messages_repository import MessagesRepository
 from repositories.users_repository import UsersRepository
@@ -22,6 +23,7 @@ from exceptions.invalid_exception.invalid_user_exception import InvalidUserIdExc
 from exceptions.invalid_exception.invalid_sub_exception import InvalidSubIdException
 from exceptions.invalid_exception.invalid_sub_post_exception import InvalidSubPostCommentIdException, InvalidSubPostIdException
 from exceptions.invalid_exception.invalid_sub_post_exception import InvalidAnsweredCommentIdException
+from exceptions.invalid_exception.invalid_vote_exception import InvalidVoteException
 from exceptions.missing_exception.missing_parameter_exception import MissingParameterException
 
 app = Flask(__name__)
@@ -248,7 +250,10 @@ def post_sub_post_vote(sub_id, sub_post_id):
         raise InvalidUserIdException()
     if sub_post is None:
         raise InvalidSubPostIdException()
-    sub_posts_repository.create_vote(sub_post_id, content["voter_id"], content["vote"])
+    try:
+        sub_posts_repository.create_vote(sub_post_id, content["voter_id"], content["vote"])
+    except IntegrityError:
+        raise InvalidVoteException()
 
     return {}, 201
 
@@ -302,7 +307,10 @@ def post_sub_post_comment_vote(sub_id, sub_post_id, comment_id):
         raise InvalidSubPostIdException()
     if comment is None:
         raise InvalidSubPostCommentIdException()
-    comments_repository.create_vote(comment_id, content["voter_id"], content["vote"])
+    try:
+        comments_repository.create_vote(comment_id, content["voter_id"], content["vote"])
+    except IntegrityError:
+        raise InvalidVoteException()
 
     return {}, 201
 
