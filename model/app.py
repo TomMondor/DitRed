@@ -84,7 +84,7 @@ def handle_exception(e):
     return response, e.status_code
 
 
-@app.route("/")  # TODO remove (or replace by sending frontend files)
+@app.route("/")  # TODO remove (or replace by sending frontend files) -> (index.html, une fois build?)
 def start_page():
     return "<p>Welcome to DitRed<p>"
 
@@ -256,16 +256,13 @@ def post_sub_post(sub_id):
 @app.route("/subs/<int:sub_id>/posts/<int:sub_post_id>/vote", methods=["POST"])
 def post_sub_post_vote(sub_id, sub_post_id):
     content = request.get_json()
-    print(content)
     sub_post_assembler.check_vote_request(content)
 
     voter = users_repository.get_user(content["voter_id"])
     sub_post = sub_posts_repository.get_post(sub_post_id)
     if voter is None:
-        print("pog")
         raise InvalidUserIdException()
     if sub_post is None:
-        print("pag")
         raise InvalidSubPostIdException()
     sub_posts_repository.create_vote(sub_post_id, content["voter_id"], content["vote"])
 
@@ -393,7 +390,6 @@ def validate_user():
 
 @socketio.on('message from user', namespace='messages')
 def receive_message_from_user(message):
-    print(f'USER MESSAGE: {message}')
     emit('user message', message, broadcast=True)
 
 
