@@ -6,11 +6,15 @@ class SubPostsRepository(Repository):
         super().__init__()
 
     def get_posts(self, sub_id):
-        self.cursor.execute(f"SELECT * FROM SubPosts WHERE sub_id = %s", (sub_id,))
+        self.cursor.execute(
+            f"SELECT S.*, U.username FROM SubPosts S, Users U WHERE S.sub_id = %s AND S.creator_id = U.id",
+            (sub_id,))
         return self.cursor.fetchall()
 
     def get_post(self, post_id):
-        self.cursor.execute(f"SELECT * FROM SubPosts WHERE id = %s", (post_id,))
+        self.cursor.execute(
+            f"SELECT S.*, U.username FROM SubPosts S, Users U WHERE S.id = %s AND S.creator_id = U.id",
+            (post_id,))
         return self.cursor.fetchone()
 
     def create_post(self, sub_id, title, content, creator_id):

@@ -7,11 +7,12 @@ class SubsRepository(Repository):
         super().__init__()
 
     def get_subs(self):
-        self.cursor.execute("SELECT * FROM Subs")
+        self.cursor.execute("SELECT S.*, U.username FROM Subs S, Users U WHERE U.id = S.creator_id")
         return self.cursor.fetchall()
 
     def get_sub(self, id):
-        self.cursor.execute(f"SELECT * FROM Subs WHERE id = %s", (id,))
+        self.cursor.execute(f"SELECT S.*, U.username FROM Subs S, Users U WHERE S.id = %s AND U.id = S.creator_id",
+                            (id,))
         return self.cursor.fetchone()
 
     def get_sub_name(self, id):

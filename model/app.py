@@ -163,11 +163,7 @@ def post_wall_post(user_id):
 @app.route("/subs", methods=["GET"])
 def get_subs():
     subs = subs_repository.get_subs()
-    authors = {}
-    for sub in subs:
-        user_id = sub[2]
-        authors[user_id] = users_repository.get_username(user_id)
-    response = jsonify(sub_assembler.assemble_subs(subs, authors))
+    response = jsonify(sub_assembler.assemble_subs(subs))
 
     return response
 
@@ -177,8 +173,7 @@ def get_sub(sub_id):
     sub = subs_repository.get_sub(sub_id)
     if sub is None:
         raise InvalidSubIdException()
-    author = UsersRepository().get_username(sub[2])
-    response = jsonify(sub_assembler.assemble_sub(sub, author))
+    response = jsonify(sub_assembler.assemble_sub(sub))
 
     return response
 
@@ -186,11 +181,7 @@ def get_sub(sub_id):
 @app.route("/subs/<int:sub_id>/posts", methods=["GET"])
 def get_sub_posts(sub_id):
     posts = sub_posts_repository.get_posts(sub_id)
-    authors = {}
-    for post in posts:
-        user_id = post[2]
-        authors[user_id] = UsersRepository().get_username(user_id)
-    response = jsonify(sub_post_assembler.assemble_posts(posts, authors))
+    response = jsonify(sub_post_assembler.assemble_posts(posts))
 
     return response
 
@@ -200,8 +191,6 @@ def get_sub_post(sub_id, sub_post_id):
     post = sub_posts_repository.get_post(sub_post_id)
     if post is None:
         raise InvalidSubPostIdException()
-    user_id = post[2]
-    author = users_repository.get_username(user_id)
     comments = comments_repository.get_comments(sub_post_id)
     authors = {}
     for comment in comments:
@@ -209,7 +198,7 @@ def get_sub_post(sub_id, sub_post_id):
         user_id = comment[2]
         authors[comment_id] = users_repository.get_username(user_id)
     assembled_comments = comments_assembler.assemble_comments(comments, authors)
-    response = jsonify(sub_post_assembler.assemble_post(post, author, assembled_comments))
+    response = jsonify(sub_post_assembler.assemble_post(post, assembled_comments))
 
     return response
 
