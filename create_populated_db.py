@@ -229,25 +229,16 @@ if __name__ == '__main__':
 
     create_tables(cursor)
 
-    print("generating user stuff")
     users_number = 150
     generate_users(cursor, users_number)
-    print("paggers")
     generate_wall_posts(cursor)
-    print("heqoeplsa;lxckaoscjasp")
     generate_private_chat_messages(cursor)
 
     subs_number = 100
     subscribers_number = 100
-    print("balls")
     generate_subs(cursor, subs_number)
-    print("asdasd")
     generate_subscribers(cursor, subscribers_number, subs_number)
-    print("qweqwe")
     generate_sub_posts(cursor, subs_number, users_number)
-    print("popo")
     generate_posts_votes(cursor, subs_number, users_number)
-    print("lolhaha")
     generate_sub_post_comments(cursor, subs_number, users_number)
-    print("kekwpogxqcl")
     generate_sub_post_comments_votes(cursor, subs_number, users_number)
