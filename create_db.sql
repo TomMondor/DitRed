@@ -189,6 +189,40 @@ BEGIN
 END; //
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE VoteOnSubPost(IN sub_post_id BIGINT, IN user_id INT, IN vote ENUM('upvote', 'downvote'))
+BEGIN
+    IF user_id NOT IN (SELECT S.user_id
+                       FROM SubPostsVotes S
+                       WHERE S.sub_post_id = sub_post_id)
+    THEN
+        INSERT INTO SubPostsVotes (sub_post_id, user_id, vote)
+        VALUES (sub_post_id, user_id, vote);
+    ELSE
+        UPDATE SubPostsVotes S
+        SET S.vote = vote
+        WHERE S.sub_post_id = sub_post_id AND S.user_id = user_id;
+    END IF;
+END; //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE VoteOnSubPostComment(IN sub_post_comment_id BIGINT, IN user_id INT, IN vote ENUM('upvote', 'downvote'))
+BEGIN
+    IF user_id NOT IN (SELECT S.user_id
+                       FROM SubPostCommentsVotes S
+                       WHERE S.sub_post_comment_id = sub_post_comment_id)
+    THEN
+        INSERT INTO SubPostCommentsVotes (sub_post_comment_id, user_id, vote)
+        VALUES (sub_post_comment_id, user_id, vote);
+    ELSE
+        UPDATE SubPostCommentsVotes S
+        SET S.vote = vote
+        WHERE S.sub_post_comment_id = sub_post_comment_id AND S.user_id = user_id;
+    END IF;
+END; //
+DELIMITER ;
+
 -- ---------------------
 -- INDEXES
 -- ---------------------
