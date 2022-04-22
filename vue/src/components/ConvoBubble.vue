@@ -65,6 +65,8 @@ export default {
 
 function formatText(text, toReplace, htmlFrontTag, htmlBackTag) {
     // test string : bonjour *ceci* est un _test_ pour voir si ça ~marche~ avec des `tags html`
+    // bug : ceci est un test _<strong>testTestTest</strong>_ merci bonsoir
+    // -> le gras va s'appliquer, alors que sur messenger on voit les balises <strong>... danger possible?
     let formattedText = text;
     //fonctionne juste si on donne un seul caractère à remplacer (toReplace)
     let symbolCount = (text.match(new RegExp(`[${toReplace}]`, "g")) || [])
