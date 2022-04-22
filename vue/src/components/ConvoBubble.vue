@@ -4,9 +4,8 @@
         <div
             class="bubble-container"
             :class="[isFromLoggedUser ? 'left-bubble' : 'right-bubble']"
-        >
-            {{ message }}
-        </div>
+            :id="timestamp"
+        ></div>
     </div>
 </template>
 
@@ -17,10 +16,12 @@ export default {
     data: () => {
         return {
             formattedTimestamp: "",
+            formattedMessage: null,
         };
     },
     mounted() {
         this.formatTimestamp();
+        this.formatMessage();
     },
     methods: {
         formatTimestamp() {
@@ -29,8 +30,58 @@ export default {
                 this.formattedTimestamp = this.formattedTimestamp.slice(1);
             }
         },
+        formatMessage() {
+            this.formattedMessage = this.message.replace(/\n/g, "<br>"); //jsp si fonctionne, notre input permet pas les enter je pense
+            this.formattedMessage = formatText(
+                this.formattedMessage,
+                "*",
+                "<strong>",
+                "</strong>"
+            );
+            this.formattedMessage = formatText(
+                this.formattedMessage,
+                "_",
+                "<em>",
+                "</em>"
+            );
+            this.formattedMessage = formatText(
+                this.formattedMessage,
+                "~",
+                "<strike>",
+                "</strike>"
+            );
+            this.formattedMessage = formatText(
+                this.formattedMessage,
+                "`",
+                '<span style="font-family: monospace;white-space: pre-wrap;font-size: 16px;">',
+                "</span>"
+            );
+
+            document.getElementById(this.timestamp).innerHTML =
+                this.formattedMessage;
+        },
     },
 };
+
+function formatText(text, toReplace, htmlFrontTag, htmlBackTag) {
+    // test string : bonjour *ceci* est un _test_ pour voir si ça ~marche~ avec des `tags html`
+    let formattedText = text;
+    //fonctionne juste si on donne un seul caractère à remplacer (toReplace)
+    let symbolCount = (text.match(new RegExp(`[${toReplace}]`, "g")) || [])
+        .length;
+    while (symbolCount >= 2) {
+        const startIndex = formattedText.indexOf(toReplace);
+        const endIndex = formattedText.indexOf(toReplace, startIndex + 1);
+        formattedText =
+            formattedText.slice(0, startIndex) +
+            ` ${htmlFrontTag}` +
+            formattedText.slice(startIndex + 1, endIndex) +
+            `${htmlBackTag} ` +
+            formattedText.slice(endIndex + 1);
+        symbolCount -= 2;
+    }
+    return formattedText;
+}
 </script>
 
 <style scoped>
@@ -45,9 +96,6 @@ export default {
 }
 
 .bubble-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     width: fit-content;
     max-width: 80vw;
     height: fit-content;
