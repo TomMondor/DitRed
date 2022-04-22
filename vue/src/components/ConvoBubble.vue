@@ -31,7 +31,8 @@ export default {
             }
         },
         formatMessage() {
-            this.formattedMessage = this.message.replace(/\n/g, "<br>"); //jsp si fonctionne, notre input permet pas les enter je pense
+            this.formattedMessage = this.message.replace(/\n/g, "<br>"); //TODO jsp si fonctionne, notre input permet pas les enter je pense
+            this.formattedMessage = escapeHTMLtags(this.formattedMessage);
             this.formattedMessage = formatText(
                 this.formattedMessage,
                 "*",
@@ -64,11 +65,8 @@ export default {
 };
 
 function formatText(text, toReplace, htmlFrontTag, htmlBackTag) {
-    // test string : bonjour *ceci* est un _test_ pour voir si ça ~marche~ avec des `tags html`
-    // bug : ceci est un test _<strong>testTestTest</strong>_ merci bonsoir
-    // -> le gras va s'appliquer, alors que sur messenger on voit les balises <strong>... danger possible?
     let formattedText = text;
-    //fonctionne juste si on donne un seul caractère à remplacer (toReplace)
+    //TODO fonctionne juste si on donne un seul caractère à remplacer (param toReplace) -> modifier pour permettre ```bloc de code```
     let symbolCount = (text.match(new RegExp(`[${toReplace}]`, "g")) || [])
         .length;
     while (symbolCount >= 2) {
@@ -82,6 +80,13 @@ function formatText(text, toReplace, htmlFrontTag, htmlBackTag) {
             formattedText.slice(endIndex + 1);
         symbolCount -= 2;
     }
+    return formattedText;
+}
+
+function escapeHTMLtags(text) {
+    let formattedText = text;
+    formattedText = formattedText.replace(/</g, "&lt;");
+    formattedText = formattedText.replace(/>/g, "&gt;");
     return formattedText;
 }
 </script>
